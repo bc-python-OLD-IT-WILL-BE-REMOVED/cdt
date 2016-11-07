@@ -1,0 +1,5 @@
+==========
+2016-11-???
+==========
+
+**Première version du package ¨cdt:** le but de ce mini-package est de fournir un outil pour rédiger efficacement un cahier de texte (à destination des ¨profs de ¨maths pour le moment). Cette version ne propose qu'une seule sortie ¨ascii un peu sommaire mais qui reste suffisante pour un outil comme Pronote (C) (il sera proposé plus tard des outils pour une ¨mef personalisable afin de produire son cahier de texte au format ¨latex ou ¨html par exemple).
