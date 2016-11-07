@@ -4,43 +4,52 @@ from json import load, dumps
 
 from cdt.tool.indent import manage as MANAGE_INDENT
 
+EXERCISE = 'ex'     # Exercise
+TUTORIAL = 'tuto'   # Tutorial class
+ACTIVITY = 'act'    # Activity
+
+EXE_KINDS = EXERCISE, TUTORIAL, ACTIVITY
+
 def book(bookrefs, nbline, source):
-    cdtref = {
-        'exo': [],
-        'td' : [],
-        'act': []
-    }
+    cdtref = {}
 
     for userref in bookrefs.split(","):
-        kind = "exo"
+        kind = EXERCISE
         refs = []
 
         for ref in userref.split("..."):
-            exo, *extra = ref.strip().split("p")
+            nbexe, *extra = ref.strip().split("p")
 
             if len(extra) == 1:
                 page = extra[0]
 
             else:
-                page = "0"
-
-            for onekind in cdtref:
-                if exo.startswith(onekind):
-                    kind = onekind
-                    exo  = exo[len(onekind):]
-                    break
-
-            exo = exo.strip()
-
-            if not exo.isdigit() or not page.isdigit():
                 raise ValueError(
                     "<< {0} >> is an illegal reference for a book"\
                         .format(userref)
                 )
 
-            refs.append([int(exo), int(page)])
+            for onekind in EXE_KINDS:
+                if nbexe.startswith(onekind):
+                    kind = onekind
+                    nbexe  = nbexe[len(onekind):]
+                    break
 
-        cdtref[kind].append(refs)
+            nbexe = nbexe.strip()
+
+            if not nbexe.isdigit() or not page.isdigit():
+                raise ValueError(
+                    "<< {0} >> is an illegal reference for a book" \
+                        .format(userref)
+                )
+
+            refs.append([int(nbexe), int(page)])
+
+        if kind in cdtref:
+            cdtref[kind].append(refs)
+
+        else:
+            cdtref[kind] = [refs]
 
     return cdtref
 
@@ -87,9 +96,7 @@ def lesson(sections, daynbline, source):
 
                 title = ""
 
-                print(toc)
                 for _section_id, _title in toc:
-                    print("--->",_section_id, _title)
                     if _section_id == section_id:
                         title = _title
 

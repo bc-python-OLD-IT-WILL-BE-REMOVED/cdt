@@ -12,7 +12,8 @@ SETTING = {
 
 DAY = {
     "keyval::=": [
-        "next", "cor"
+        "train", "cor",
+        "next"
     ],
     "verbatim": [
         "comment",

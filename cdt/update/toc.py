@@ -23,7 +23,7 @@ def _jsontoc(flattoc, upsections = [], mainlevel = 0):
 
             jsonobj.append([
                 last_upsections,
-                title
+                title.strip()
             ])
 
             subtoc = []

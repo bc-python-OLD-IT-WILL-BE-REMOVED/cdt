@@ -7,10 +7,14 @@ from orpyste.parse.ast import ASTError as ASTError
 from orpyste.parse.walk import PeufError as PeufError
 
 from cdt.config.mode import DAY as MODE_DAY
-from cdt.parse.daybyday import extract as EXTRACT_DAY, \
-                               NODAY
-from cdt.parse.reference import book as REF_BOOK, \
-                                lesson as REF_LESSON
+from cdt.parse.daybyday import (
+    extract as EXTRACT_DAY,
+    NODAY
+)
+from cdt.parse.reference import (
+    book as REF_BOOK,
+    lesson as REF_LESSON
+)
 
 def __error_message(message, path, oneday = None, updatenb = True):
     if oneday == None:
