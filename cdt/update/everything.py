@@ -38,7 +38,8 @@ def _nbmonth(nb):
     return nb
 
 def build(folder):
-    global start_month, end_month
+    global start_month, end_month, start_year, end_year
+
     temp_folder = folder / ".cdt"
 
 # Settings
@@ -48,8 +49,8 @@ def build(folder):
         jsonify    = setting.jsonify
     )
 
-    start_month = settings["holiday"]["start"][1]
-    end_month   = settings["holiday"]["end"][1]
+    start_year, start_month = settings["holiday"]["start"][:2]
+    end_year, end_month     = settings["holiday"]["end"][:2]
 
 # ToC and datas analyzed class by class
     for classname in settings["class"]:
@@ -75,7 +76,15 @@ def build(folder):
         month_paths = []
 
         for _, onetxtfile in txtfiles:
-            month_paths.append(onetxtfile.with_ext("json").name)
+            if int(onetxtfile.stem) < start_month:
+                year = end_year
+            else:
+                year = start_year
+
+            month_paths.append((
+                str(year),
+                onetxtfile.with_ext("json").name
+            ))
 
             _buildjson(
                 txtfile    = onetxtfile,

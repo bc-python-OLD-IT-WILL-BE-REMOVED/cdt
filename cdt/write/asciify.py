@@ -144,23 +144,26 @@ def build(folder):
     for classname, longname in settings["class"].items():
         class_folder = temp_folder / classname
 
-        if notfirstclass:
-            print("\n")
-
-        else:
-            notfirstclass = True
-
-        print(withframe(longname))
-
-        for onemonth in _json2py(class_folder / "months.json"):
+        for year, onemonth in _json2py(class_folder / "months.json"):
             datas    = _json2py(class_folder / onemonth)
             onemonth = onemonth.split(".")[0]
 
             for oneday in reversed(datas["alldays"]):
+                if notfirstclass:
+                    print("\n")
+
+                else:
+                    notfirstclass = True
+
+                print(withframe(longname))
+
                 print()
                 print(
                     titleframe(
-                        text = datename(oneday, onemonth),
+                        text = datename(
+                            yearnb  = year,
+                            monthnb = onemonth,
+                            daynb   = oneday),
                         level = 1
                     )
                 )
@@ -173,3 +176,24 @@ def build(folder):
 
                         print()
                         print(func(infos[kind]))
+
+                answer = input("""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+q     --> Quitter,
+c     --> Changer de classe
+Autre --> Continuer au jour suivant
+
+Votre choix : """)
+
+                print(
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                )
+
+                if answer == "q":
+                    exit()
+
+                elif answer == "c":
+                    break
+
+            if answer == "c":
+                break
