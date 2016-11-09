@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from json import loads
+from json import dumps, loads
 
 from cdt.update import (
     month,
@@ -27,6 +27,7 @@ def _buildjson(
         f.write(jsonobj)
 
     return loads(jsonobj)
+
 
 def _nbmonth(nb):
     global start_month, end_month
@@ -71,9 +72,22 @@ def build(folder):
 
         txtfiles.sort(key = lambda x: _nbmonth(x[0]))
 
+        month_paths = []
+
         for _, onetxtfile in txtfiles:
+            month_paths.append(onetxtfile.with_ext("json").name)
+
             _buildjson(
                 txtfile    = onetxtfile,
                 jsonfolder = temp_classfolder,
                 jsonify    = month.jsonify
             )
+
+        jsonfile = temp_classfolder / "months.json"
+        jsonfile.create("file")
+
+        with jsonfile.open(
+            mode     = "w",
+            encoding = "utf-8"
+        ) as f:
+            f.write(dumps(month_paths))

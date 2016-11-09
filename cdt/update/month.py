@@ -82,6 +82,7 @@ def buildref(key, value, source, oneday):
 
 def jsonify(source):
     jsonobj = {}
+    alldays = []
 
     for oneday, content in EXTRACT_DAY(source).items():
         datas = ReadBlock(
@@ -119,6 +120,7 @@ def jsonify(source):
                 )
 
             jsonobj[daynb] = {}
+            alldays.append(daynb)
 
             for onedata in datas:
                 if onedata.isblock():
@@ -162,6 +164,10 @@ def jsonify(source):
                                     daynbline + relnbline - 1
                                 )
                             )
+
+# In JSON, keys can't be integers !!!
+            alldays.sort()
+            jsonobj["alldays"] = [str(x) for x in alldays]
 
 # Let's clean the partial datas !
         datas.remove()
