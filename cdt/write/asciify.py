@@ -122,14 +122,20 @@ def next(values):
 
 def lesson(values):
     text = [
-        titleframe("COURS")
+        titleframe("COURS"),
+        ""
+    ] + [
+        "    "*x[0] + x[1] for x in values
     ]
 
     return "\n".join(text)
 
 def comment(values):
     text = [
-        titleframe("COMMENTAIRE")
+        titleframe("COMMENTAIRE"),
+        ""
+    ] + [
+        x[1] for x in values
     ]
 
     return "\n".join(text)

@@ -48,10 +48,27 @@ def jsonify(source):
     ) as tocdef:
         flattoc = []
 
+        incomment = False
+
         for nbline, line in enumerate(tocdef, 1):
             level, line = MANAGE_INDENT(line)
 
             if line:
+                if line[:2] == "//":
+                    continue
+
+                if line[:2] == "/*":
+                    if line[-2:] == "*/":
+                        continue
+
+                    incomment = True
+
+                if incomment:
+                    if line[-2:] == "*/":
+                        incomment = False
+
+                    continue
+
                 i = line.find(")")
 
                 if i == -1:

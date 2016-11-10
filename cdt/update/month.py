@@ -129,7 +129,10 @@ def jsonify(source):
                     jsonobj[daynb][lastblockname] = {}
 
                 elif onedata.isdata():
-                    if lastblockname == "lesson":
+                    if lastblockname == "comment":
+                        jsonobj[daynb][lastblockname] = onedata.rtu_data()
+
+                    elif lastblockname == "lesson":
                         jsonobj[daynb][lastblockname] = buildref(
                             key    = lastblockname,
                             value  = onedata.rtu_data(),
