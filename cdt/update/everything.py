@@ -3,8 +3,8 @@
 from json import dumps, loads
 
 from cdt.update import (
-    month,
-    setting,
+    months,
+    settings,
     toc
 )
 
@@ -43,17 +43,19 @@ def build(folder):
     temp_folder = folder / ".cdt"
 
 # Settings
-    settings = _buildjson(
+    user_settings = _buildjson(
         txtfile    = folder / "settings.txt",
         jsonfolder = temp_folder,
-        jsonify    = setting.jsonify
+        jsonify    = settings.jsonify
     )
 
-    start_year, start_month = settings["holiday"]["start"][:2]
-    end_year, end_month     = settings["holiday"]["end"][:2]
+    exit()
+
+    start_year, start_month = user_settings["holiday"]["start"][:2]
+    end_year, end_month     = user_settings["holiday"]["end"][:2]
 
 # ToC and datas analyzed class by class
-    for classname in settings["class"]:
+    for classname in user_settings["class"]:
         classfolder      = folder / classname
         temp_classfolder = temp_folder / classname
 
@@ -89,7 +91,7 @@ def build(folder):
             _buildjson(
                 txtfile    = onetxtfile,
                 jsonfolder = temp_classfolder,
-                jsonify    = month.jsonify
+                jsonify    = months.jsonify
             )
 
         jsonfile = temp_classfolder / "months.json"

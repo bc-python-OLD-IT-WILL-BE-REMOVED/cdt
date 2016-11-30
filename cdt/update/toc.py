@@ -2,7 +2,7 @@
 
 from json import dumps
 
-from cdt.tool.indent import manage as MANAGE_INDENT
+from cdt.tools.indent import manage as MANAGE_INDENT
 
 def _jsontoc(flattoc, upsections = [], mainlevel = 0):
     jsonobj = []

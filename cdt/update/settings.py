@@ -18,7 +18,7 @@ from orpyste.data import ReadBlock
 from orpyste.parse.ast import ASTError as ASTError
 from orpyste.parse.walk import PeufError as PeufError
 
-from cdt.config.mode import SETTING as MODE_SETTING
+from cdt.config.modes import SETTING as MODE_SETTING
 
 
 _GENERAL_KEYS = [
@@ -102,15 +102,12 @@ prototype::
              are stored the user's datas with extra informations automatically
              created
     """
-    datas = ReadBlock(
-        content = source,
-        mode    = MODE_SETTING
-    )
-
     try:
-        datas.build()
-        recudict = datas.recudict(nosep = True)
-        datas.remove()
+        with ReadBlock(
+            content = source,
+            mode    = MODE_SETTING
+        ) as datas:
+            treedict = datas.mydict("tree std nosep nonb")
 
     except ASTError as e:
         raise ASTError(__error_message(e))
@@ -118,11 +115,11 @@ prototype::
     except PeufError as e:
         raise PeufError(__error_message(e))
 
-    jsonobj = deepcopy(recudict)
+    jsonobj = deepcopy(treedict)
 
 # A default value for all keys of the general block.
     for key in _GENERAL_KEYS:
-        jsonobj["general"][key] = recudict["general"].get(key, "")
+        jsonobj["general"][key] = treedict["general"].get(key, "")
 
 # Automatic dectection of the zone regardin the city or the zip code.
     # TODO !!!
@@ -130,7 +127,7 @@ prototype::
 # Holidays.
     try:
         config_holidays = importlib.import_module(
-            name = "cdt.config.holiday.{0}_{1}".format(
+            name = "cdt.config.holidays.{0}_{1}".format(
                 jsonobj["general"]["lang"],
                 jsonobj["general"]["year"].replace("-", "_")
             )

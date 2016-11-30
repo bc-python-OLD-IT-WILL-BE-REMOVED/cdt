@@ -1,0 +1,18 @@
+// The blocks allowed for tests.
+//
+// :date: is a magic name indicating that a legal date must be used.
+
+main::
+    keyval::
+        seps : =
+        names: lesson,
+               home,
+               test,
+               info
+
+
+lesson-home-test-info::
+    date
+    time
+    title
+    ref

@@ -1,0 +1,22 @@
+// The blocks allowed for one single day.
+
+main::
+    keyval::
+        seps : =
+        names: train,
+               cor,
+               next
+
+    verbatim::
+        names: comment,
+               lesson
+
+
+// The keys to use in blocks. We use - to indicate blocks using the same keys !
+//
+// We can also use several times the same blocks so as to add new keys.
+
+train-cor-next::
+    book,
+    perso,
+    lesson

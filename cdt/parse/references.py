@@ -1,16 +1,25 @@
 #!/usr/bin/env python3
 
+"""
+prototype::
+    date = 2016-11-???
+
+
+This module ???
+"""
+
 from json import load, dumps
 
-from cdt.tool.indent import manage as MANAGE_INDENT
+from cdt.config.exercises import *
+from cdt.tools.indent import manage as MANAGE_INDENT
 
-EXERCISE = 'ex'     # Exercise
-TUTORIAL = 'tuto'   # Tutorial class
-ACTIVITY = 'act'    # Activity
-
-EXE_KINDS = EXERCISE, TUTORIAL, ACTIVITY
 
 def book(bookrefs, nbline, source):
+    """
+property::
+    """
+    # jsontoc = source.parent.parent / ".cdt" / source.parent.name / "toc.json"
+
     cdtref = {}
 
     for userref in bookrefs.split(","):
@@ -55,6 +64,9 @@ def book(bookrefs, nbline, source):
 
 
 def lesson(sections, daynbline, source):
+    """
+property::
+    """
     jsontoc = source.parent.parent / ".cdt" / source.parent.name / "toc.json"
 
     with jsontoc.open() as f:

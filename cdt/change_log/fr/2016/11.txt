@@ -1,8 +1,18 @@
 ==========
+2016-11-??????
+==========
+
+**¨Maj relativement à la nouvelle version de ¨orpyste: ** ceci était nécessaire car la classe ``orpyste.data.ReadBlock`` a changé d'interface de programmation.
+
+
+**Création de générateurs automatiques de codes: ** dans le dossier path::``factory`` les noms des blocs et des clés autorisés sont définis très efficacement via un ensemble de fichiers de type ¨orpyste. Ceci permet de produire du code ¨python dans le sous-package ``config`` de façon très facile à maintenir.
+
+
+==========
 2016-11-10
 ==========
 
-**Nouvelles fonctionnalités : ** voici ce qui est neuf.
+**Nouvelles fonctionnalités : ** voici ce qui a été fait.
 
     1) Possibilité d'ajouter des commentaires d'ordre général.
 
@@ -13,6 +23,6 @@
 2016-11-09
 ==========
 
-**Première version très rudimentaire du package ¨cdt:** le but de ce mini-package est de fournir un outil pour rédiger efficacement un cahier de texte (à destination des ¨profs de ¨maths pour le moment). Cette toute première version **très rustique, très peu évoluée et avec un code moche** ne propose qu'une seule sortie ¨ascii un peu sommaire mais qui reste suffisante pour un outil comme Pronote (C).
+**Première version très rudimentaire du package ¨cdt:** le but de ce mini-package est de fournir un outil pour rédiger efficacement un cahier de texte (à destination des ¨profs de ¨maths pour le moment). Cette toute première version **très rustique, très peu évoluée et avec un code interne "moche"** ne propose qu'une seule sortie ¨ascii un peu sommaire mais qui reste suffisante pour un outil comme Pronote (C).
 
 Pour le moment, seul est gérée la saisie d'exercices dans un livre pour de l'entraînement, de la correction ou comme travail pour la prochaine séance.

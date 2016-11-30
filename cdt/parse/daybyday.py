@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 
+"""
+prototype::
+    date = 2016-11-28
+
+
+This module ???
+"""
+
 from collections import OrderedDict
 
 
 NODAY = (None, 1)
 
 class _Extract():
+    """
+property::
+    """
+
     def __init__(self, source):
         self.source  = source
 
@@ -14,7 +26,12 @@ class _Extract():
             (self.lastday, [])
         ])
 
+
     def build(self):
+        """
+property::
+    action = ????
+        """
         self.line        = ""
         self.lastcontent = []
         self.intitleday  = False
@@ -68,10 +85,19 @@ class _Extract():
 
         return self.days
 
-# Local functions simplify the job !
+
     def addcontent(self):
+        """
+property::
+    action = ????
+        """
         self.days[self.lastday].append(self.line)
 
-# We have to take care of multilines comments.
+
 def extract(source):
+    """
+property::
+    arg = pathlib.Path: source ;
+          ????
+    """
     return _Extract(source).build()

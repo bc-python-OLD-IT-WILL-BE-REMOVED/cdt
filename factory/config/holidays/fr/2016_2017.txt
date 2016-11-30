@@ -1,0 +1,17 @@
+main::
+    range = 2016-09-01 , 2017-07-08
+    area  = yes
+
+area::
+    A::
+        range = 10-19 , 11-03
+        name  = les vacances de la Toussaint
+
+        range = 12-17 , 01-03
+        name  = les vacances de Noël
+
+        range = 02-18 , 03-06
+        name  = les vacances d'Hiver
+
+        range = 04-15 , 05-02
+        name  = les vacances de Pâques

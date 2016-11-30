@@ -8,13 +8,13 @@ from mistool.term_use import (
     withframe
 )
 
-from cdt.config.mode import DAY as DAY_MODE
-from cdt.parse.reference import (
+from cdt.config.modes import DAY as DAY_MODE
+from cdt.parse.references import (
     EXERCISE,
     TUTORIAL,
     ACTIVITY
 )
-from cdt.tool.date import *
+from cdt.tools.date import *
 
 
 def _json2py(jsonfile):
@@ -144,10 +144,10 @@ def comment(values):
 def build(folder):
     temp_folder = folder / ".cdt"
 
-    settings = _json2py(temp_folder / "settings.json")
+    user_settings = _json2py(temp_folder / "settings.json")
 
     notfirstclass = False
-    for classname, longname in settings["class"].items():
+    for classname, longname in user_settings["class"].items():
         class_folder = temp_folder / classname
 
         for year, onemonth in _json2py(class_folder / "months.json"):

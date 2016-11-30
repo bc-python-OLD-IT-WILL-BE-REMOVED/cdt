@@ -2,13 +2,13 @@
 
 SETTING = {
     "keyval::=": [
-        "general", "abrev",
+        "general", 
+        "abrev",
         "class", "extra",
         "tuesday", "wednesday", "thursday", "friday"
     ],
     "container": "schedule"
 }
-
 
 DAY = {
     "keyval::=": [

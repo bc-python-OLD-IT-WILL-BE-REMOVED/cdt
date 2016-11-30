@@ -1,0 +1,25 @@
+// The blocks allowed in the file ``settings.txt`` (we can use query paths).
+
+main::
+    keyval::
+        seps : =
+        names: general, abrev,
+               class, extra,
+// Here we use a shortcut so as to not write ``schedule/monday``,
+// ``schedule/tuesday``, and so on...
+// We also indicate implicitly that ``schedule`` is a container.
+               schedule/(
+                    monday, tuesday, wednesday, thursday,
+                    friday, saturday, sunday
+               )
+
+
+// The keys to use in the key-val blocks (the missing blocks are the ones
+// allowing to use any kind of key).
+
+general::
+    lang,
+    name,
+    subject,
+    country, city, zipcode, area, institute,
+    year
