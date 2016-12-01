@@ -5,9 +5,9 @@
 main::
     keyval::
         seps : =
-        names: lesson,
-               home,
-               test,
+        names: lesson
+               home
+               test
                info
 
 

@@ -3,12 +3,13 @@
 main::
     keyval::
         seps : =
-        names: train,
-               cor,
+        names: train
+               cor
                next
+               info
 
     verbatim::
-        names: comment,
+        names: comment
                lesson
 
 
@@ -16,7 +17,7 @@ main::
 //
 // We can also use several times the same blocks so as to add new keys.
 
-train-cor-next::
-    book,
-    perso,
+info-train-cor-next::
+    book
+    perso
     lesson

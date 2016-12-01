@@ -3,23 +3,23 @@
 main::
     keyval::
         seps : =
-        names: general, abrev,
-               class, extra,
-// Here we use a shortcut so as to not write ``schedule/monday``,
+        names: general  abrev
+               class  extra
+// Here we use a none recursive shortcut so as to not write ``schedule/monday``,
 // ``schedule/tuesday``, and so on...
-// We also indicate implicitly that ``schedule`` is a container.
+// We also indicate at the same time that ``schedule`` is a container.
                schedule/(
-                    monday, tuesday, wednesday, thursday,
-                    friday, saturday, sunday
+                   monday  tuesday  wednesday  thursday
+                   friday  saturday  sunday
                )
 
 
 // The keys to use in the key-val blocks (the missing blocks are the ones
-// allowing to use any kind of key).
+// allowing to use any kind of key, indeed this is for keys like date or time).
 
 general::
-    lang,
-    name,
-    subject,
-    country, city, zipcode, area, institute,
+    lang
+    name
+    subject
+    country  city  zipcode  area  institute
     year
