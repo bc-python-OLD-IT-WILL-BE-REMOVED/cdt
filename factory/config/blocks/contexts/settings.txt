@@ -1,4 +1,6 @@
 // The blocks allowed in the file ``settings.txt`` (we can use query paths).
+//
+// See ``settings.txt`` for infos about the values used in this peuf file.
 
 main::
     keyval::
@@ -16,10 +18,30 @@ main::
 
 // The keys to use in the key-val blocks (the missing blocks are the ones
 // allowing to use any kind of key, indeed this is for keys like date or time).
+//
+// We can can use the following indications.
+//
+//    1) ``keyname = :onetype:`` indicates for a key named ``keyname`` that the
+//        values must be of type ``:onetype:``.
+//
+//    2) ``key`` indicates that the values are just raw strings.
+//
+//    3) ``:onetype: = :anothertype:`` indicates that the keys must be of type
+//       ``:onetype:``, and the values of type ``:anothertype:``.
+//
+//    4) ``:onetype:`` indicates that the keys must be of type ``:onetype:``,
+//       and the values are just raw strings.
 
 general::
-    lang
-    name
+    year = :delta_year:
+    lang = :lang:
+    name = :name:
     subject
-    country  city  zipcode  area  institute
-    year
+    country
+    city
+    zipcode
+    area
+    institute
+
+monday-tuesday-wednesday-thursday-friday-saturday-sunday::
+    :delta_time:

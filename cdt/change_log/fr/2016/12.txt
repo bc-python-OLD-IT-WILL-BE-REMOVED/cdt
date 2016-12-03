@@ -1,0 +1,16 @@
+==========
+2016-12-??????
+==========
+
+**¨Maj relativement à la nouvelle version de ¨orpyste: ** ceci était nécessaire car la classe ``orpyste.data.ReadBlock`` a changé d'interface de programmation.
+
+
+==========
+2016-12-03
+==========
+
+**Création de générateurs automatiques de codes: ** tout se passe dans le dossier path::``factory``. Voici ce qui a été fait.
+
+    1) Les noms des blocs et des clés autorisés sont définis très efficacement via un ensemble de fichiers de type ¨orpyste. Il y est aussi défini les types éventuels des clés ¨etou des valeurs.
+
+    2) Les blocs de texte utilisés pour automatiser ce qui est écrit dans le cahier de texte sont maintenant gérer à part dans un dossier qu'un non programmeur peut utiliser pour traduire le cahier de texte dans une autre langue.

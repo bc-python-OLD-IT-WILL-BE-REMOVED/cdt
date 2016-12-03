@@ -1,0 +1,47 @@
+in_the_book::
+    dans le livre
+
+in_the_lesson::
+    dans le cours
+
+personal_document::
+    ...
+
+
+one_ref::
+    {nb_exe} page {nb_page}
+
+// Here, the program will replace ``...`` for example by
+// ``{one_ref}, {one_ref}, {one_ref} et {one_ref}``
+// if it is needed. The repetitions use the text before ``...``.
+
+some_refs::
+    {one_ref} ... et {one_ref}
+
+
+one_exercise::
+    l'exercice {one_ref}
+
+several_exercises::
+    les exercices {some_refs}
+
+
+one_example::
+    l'exemple {one_ref}
+
+several_examples::
+    les exemples {some_refs}
+
+
+one_activity::
+    l'activité {one_ref}
+
+several_activities::
+    les activités {some_refs}
+
+
+one_practical_exercise::
+    le T.P. {one_ref}
+
+several_practical_exercises::
+    les T.P. {some_refs}

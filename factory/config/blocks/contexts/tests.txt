@@ -1,6 +1,6 @@
 // The blocks allowed for tests.
 //
-// :date: is a magic name indicating that a legal date must be used.
+// See ``settings.txt`` for infos about the values used in this peuf file.
 
 main::
     keyval::
@@ -9,10 +9,11 @@ main::
                home
                test
                info
+               mcq
 
 
-lesson-home-test-info::
-    date
-    time
+lesson-home-test-info-mcq::
+    date  = :date:
+    time  = :time:
     title
-    ref
+    ref   = :ref_toc:

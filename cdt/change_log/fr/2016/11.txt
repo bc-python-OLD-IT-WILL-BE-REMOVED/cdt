@@ -1,14 +1,4 @@
 ==========
-2016-11-??????
-==========
-
-**¨Maj relativement à la nouvelle version de ¨orpyste: ** ceci était nécessaire car la classe ``orpyste.data.ReadBlock`` a changé d'interface de programmation.
-
-
-**Création de générateurs automatiques de codes: ** dans le dossier path::``factory`` les noms des blocs et des clés autorisés sont définis très efficacement via un ensemble de fichiers de type ¨orpyste. Ceci permet de produire du code ¨python dans le sous-package ``config`` de façon très facile à maintenir.
-
-
-==========
 2016-11-10
 ==========
 
@@ -16,7 +6,7 @@
 
     1) Possibilité d'ajouter des commentaires d'ordre général.
 
-    2) Gestion du cours de l'enseignant à l'aide d'une table des matières.
+    2) Ajout d'une table des matières pour le cours de l'enseignant.
 
 
 ==========

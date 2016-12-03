@@ -38,15 +38,12 @@ print('    * Looking for the holidays...')
 for ppath in THIS_DIR.walk("file::**.txt"):
     lang, name = ppath.parent.name, ppath.stem
 
-    datas = ReadBlock(
+    with ReadBlock(
         content = ppath,
         mode    = MODE
-    )
-
-    datas.build()
-
-    print(lang, name)
-    pprint(datas.mydict("nosep nonb"))
+    ) as datas:
+        print(lang, name)
+        pprint(datas.mydict("nosep nonb"))
 
 
 # ---------------------------- #

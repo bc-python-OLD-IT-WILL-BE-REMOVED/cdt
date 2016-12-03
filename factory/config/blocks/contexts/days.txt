@@ -1,4 +1,6 @@
 // The blocks allowed for one single day.
+//
+// See ``settings.txt`` for infos about the values used in this peuf file.
 
 main::
     keyval::
@@ -13,11 +15,7 @@ main::
                lesson
 
 
-// The keys to use in blocks. We use - to indicate blocks using the same keys !
-//
-// We can also use several times the same blocks so as to add new keys.
-
 info-train-cor-next::
-    book
-    perso
-    lesson
+    book   = :ref_book:
+    perso  = :ref_perso:
+    lesson = :ref_toc:
