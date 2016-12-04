@@ -18,3 +18,7 @@ title_next::
 
 title_comment::
     commentaire
+
+
+title_absence::
+    absence

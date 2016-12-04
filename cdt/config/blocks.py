@@ -4,19 +4,19 @@
 
 # --- BLOCKS --- #
 
-DAYS = {'keyval:: =': ('info', 'cor', 'next', 'train'), 'verbatim': ('lesson', 'comment')}
+DAYS = {'keyval:: =': ('train', 'cor', 'info', 'next'), 'verbatim': ('comment', 'absence', 'lesson')}
 
-SETTINGS = {'keyval:: =': ('wednesday', 'abrev', 'general', 'thursday', 'extra', 'monday', 'sunday', 'friday', 'saturday', 'class', 'tuesday'), 'container': ('schedule',)}
+SETTINGS = {'keyval:: =': ('wednesday', 'class', 'monday', 'thursday', 'saturday', 'sunday', 'contexts', 'abrev', 'general', 'friday', 'tuesday'), 'container': ('schedule',)}
 
-TESTS = {'keyval:: =': ('home', 'info', 'test', 'lesson', 'mcq')}
+TESTS = {'keyval:: =': ('test', 'info', 'home', 'mcq', 'lesson')}
 
 # --- COMMON DEFINITIONS FOR KEYS AND THEIR VALUES --- #
 
-__COMMON_1 = {'book': ':ref_book:', 'perso': ':ref_perso:', 'lesson': ':ref_toc:'}
+__COMMON_1 = {'perso': ':ref_perso:', 'book': ':ref_book:', 'lesson': ':ref_toc:'}
 
 __COMMON_2 = {':delta_time:': ':asit:'}
 
-__COMMON_3 = {'ref': ':ref_toc:', 'title': ':asit:', 'time': ':time:', 'date': ':date:'}
+__COMMON_3 = {'ref': ':ref_toc:', 'time': ':time:', 'date': ':date:', 'title': ':asit:'}
 
 # --- ABOUT KEYS AND THEIR VALUES --- #
 
@@ -27,6 +27,7 @@ DAYS_KEYS["cor"] = __COMMON_1
 DAYS_KEYS["next"] = __COMMON_1
 
 SETTINGS_KEYS = {}
+SETTINGS_KEYS["general"] = {'lang': ':lang:', 'country': ':asit:', 'area': ':asit:', 'subject': ':asit:', 'city': ':asit:', 'year': ':delta_year:', 'institute': ':asit:', 'zipcode': ':asit:', 'name': ':name:'}
 SETTINGS_KEYS["monday"] = __COMMON_2
 SETTINGS_KEYS["tuesday"] = __COMMON_2
 SETTINGS_KEYS["wednesday"] = __COMMON_2
@@ -34,7 +35,6 @@ SETTINGS_KEYS["thursday"] = __COMMON_2
 SETTINGS_KEYS["friday"] = __COMMON_2
 SETTINGS_KEYS["saturday"] = __COMMON_2
 SETTINGS_KEYS["sunday"] = __COMMON_2
-SETTINGS_KEYS["general"] = {'country': ':asit:', 'year': ':delta_year:', 'zipcode': ':asit:', 'subject': ':asit:', 'name': ':name:', 'city': ':asit:', 'lang': ':lang:', 'institute': ':asit:', 'area': ':asit:'}
 
 TESTS_KEYS = {}
 TESTS_KEYS["lesson"] = __COMMON_3

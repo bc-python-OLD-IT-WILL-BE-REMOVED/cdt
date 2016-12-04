@@ -11,7 +11,8 @@ main::
                info
 
     verbatim::
-        names: comment
+        names: absence
+               comment
                lesson
 
 

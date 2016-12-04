@@ -6,7 +6,8 @@ main::
     keyval::
         seps : =
         names: general  abrev
-               class  extra
+               class    contexts
+
 // Here we use a none recursive shortcut so as to not write ``schedule/monday``,
 // ``schedule/tuesday``, and so on...
 // We also indicate at the same time that ``schedule`` is a container.

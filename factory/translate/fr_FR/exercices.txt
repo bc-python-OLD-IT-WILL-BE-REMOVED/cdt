@@ -1,11 +1,11 @@
 in_the_book::
-    dans le livre
+    dans le livre, {some_refs}
 
 in_the_lesson::
-    dans le cours
+    dans le cours, {some_refs}
 
 personal_document::
-    ...
+    dans {some_refs}
 
 
 one_ref::
@@ -19,29 +19,36 @@ some_refs::
     {one_ref} ... et {one_ref}
 
 
-one_exercise::
+the_exercise::
     l'exercice {one_ref}
 
 several_exercises::
     les exercices {some_refs}
 
 
-one_example::
+the_example::
     l'exemple {one_ref}
 
 several_examples::
     les exemples {some_refs}
 
 
-one_activity::
+the_activity::
     l'activité {one_ref}
 
 several_activities::
     les activités {some_refs}
 
 
-one_practical_exercise::
+the_practical_work::
     le T.P. {one_ref}
 
-several_practical_exercises::
+several_practical_works::
     les T.P. {some_refs}
+
+
+the_tutorial::
+    le T.D. {one_ref}
+
+several_tutorials::
+    les T.D. {some_refs}

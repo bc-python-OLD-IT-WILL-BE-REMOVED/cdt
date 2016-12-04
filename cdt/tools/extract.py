@@ -14,16 +14,16 @@ def datename(yearnb, monthnb, daynb, lang):
 # -- TIMES -- #
 # ----------- #
 
-def date():
+def date(text):
     ...
 
-def time():
+def time(text):
     ...
 
-def delta_time():
+def delta_time(text):
     ...
 
-def delta_year():
+def delta_year(text):
     ...
 
 
@@ -31,13 +31,13 @@ def delta_year():
 # -- REFERENCES -- #
 # ---------------- #
 
-def ref_book():
+def ref_book(text):
     ...
 
-def ref_perso():
+def ref_perso(text):
     ...
 
-def ref_toc():
+def ref_toc(text):
     ...
 
 
@@ -45,8 +45,8 @@ def ref_toc():
 # -- GENERAL -- #
 # ------------- #
 
-def lang():
+def lang(text):
     ...
 
-def name():
+def name(text):
     ...

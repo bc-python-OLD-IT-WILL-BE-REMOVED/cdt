@@ -1,0 +1,11 @@
+do::
+    faire {some_refs}
+
+not_do::
+    ne pas faire {some_refs}
+
+everything_but::
+    tout sauf {some_refs}
+
+only::
+    seulement {some_refs}
