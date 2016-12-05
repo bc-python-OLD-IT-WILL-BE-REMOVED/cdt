@@ -43,14 +43,14 @@ for subdir in THIS_DIR.walk("dir::*"):
 
         files_used[subdir.name].add(onefile.name)
 
-MODE = {"verbatim"  : ":default:"}
+MODE = "verbatim"
 
 
 # ---------------------- #
 # -- NO MISSING FILES -- #
 # ---------------------- #
 
-# << WARNING ! >> fr_FR is always the uptodate flder !
+# << WARNING ! >> fr_FR is always the up-to-date flder !
 
 files_needed = files_used[MAIN_LANG]
 del files_used[MAIN_LANG]

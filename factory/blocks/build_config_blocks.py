@@ -140,6 +140,29 @@ def typeswanted(keyvaltouse):
 
     return keyvalandtypes
 
+def myrepr(val):
+# We sort the keys of dictionaries to not polluate the git messages.
+    if isinstance(val, dict):
+        _repr = "{"
+
+        for key in sorted(val.keys()):
+            _repr += "{0}: {1}, ".format(
+                myrepr(key),
+                myrepr(val[key])
+            )
+
+        _repr = _repr[:-2] + "}"
+
+# We sort the keys of dictionaries to not polluate the git messages.
+    elif isinstance(val, (list, tuple)):
+        _repr = repr(sorted(list(val)))
+
+# Anything else.
+    else:
+        _repr = repr(val)
+
+    return _repr
+
 
 # ---------------------------- #
 # -- CONFIG. FOR THE BLOCKS -- #
@@ -179,17 +202,17 @@ for ppath in PEUF_DIR.walk("file::**.txt"):
 # Extraction of names and maybe some containers !
         containers, names = extractnames(subinfos["names"])
 
-        mode[kind] = tuple(names)
+        mode[kind] = names
 
     if containers:
-        mode["container"] = tuple(containers)
+        mode["container"] = containers
 
     mode = dict(mode)
     name = name.upper()
 
     pytxt_config += [
         "",
-        "{0} = {1}".format(name, repr(mode))
+        "{0} = {1}".format(name, myrepr(mode))
     ]
 
 # Keys to be used and types for values.
@@ -211,8 +234,9 @@ for ppath in PEUF_DIR.walk("file::**.txt"):
             dictforkeys_name + " = {}"
         ]
 
-        for blocknames, keyvaltouse in infos.items():
-            whatwewant = typeswanted(keyvaltouse)
+        for blocknames in sorted(infos.keys()):
+            keyvaltouse = infos[blocknames]
+            whatwewant  = typeswanted(keyvaltouse)
 
             if "-" in blocknames:
                 common_nb  += 1
@@ -227,7 +251,7 @@ for ppath in PEUF_DIR.walk("file::**.txt"):
 
                 common_defs_txt += [
                     "",
-                    "{0} = {1}".format(common_name, repr(whatwewant)),
+                    "{0} = {1}".format(common_name, myrepr(whatwewant)),
                 ]
 
                 for oneblock in blocknames.split("-"):
@@ -264,7 +288,7 @@ for ppath in PEUF_DIR.walk("file::**.txt"):
                     texttofill.format(
                         dictforkeys_name,
                         oneblock,
-                        repr(whatwewant)
+                        myrepr(whatwewant)
                     )
                 ]
 

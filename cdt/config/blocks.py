@@ -4,19 +4,19 @@
 
 # --- BLOCKS --- #
 
-DAYS = {'keyval:: =': ('train', 'cor', 'info', 'next'), 'verbatim': ('comment', 'absence', 'lesson')}
+DAYS = {'keyval:: =': ['cor', 'info', 'next', 'train'], 'verbatim': ['absence', 'comment', 'lesson']}
 
-SETTINGS = {'keyval:: =': ('wednesday', 'class', 'monday', 'thursday', 'saturday', 'sunday', 'contexts', 'abrev', 'general', 'friday', 'tuesday'), 'container': ('schedule',)}
+SETTINGS = {'container': ['schedule'], 'keyval:: =': ['abrev', 'class', 'contexts', 'friday', 'general', 'monday', 'saturday', 'sunday', 'thursday', 'tuesday', 'wednesday']}
 
-TESTS = {'keyval:: =': ('test', 'info', 'home', 'mcq', 'lesson')}
+TESTS = {'keyval:: =': ['home', 'info', 'lesson', 'mcq', 'test']}
 
 # --- COMMON DEFINITIONS FOR KEYS AND THEIR VALUES --- #
 
-__COMMON_1 = {'perso': ':ref_perso:', 'book': ':ref_book:', 'lesson': ':ref_toc:'}
+__COMMON_1 = {'book': ':ref_book:', 'lesson': ':ref_toc:', 'perso': ':ref_perso:'}
 
 __COMMON_2 = {':delta_time:': ':asit:'}
 
-__COMMON_3 = {'ref': ':ref_toc:', 'time': ':time:', 'date': ':date:', 'title': ':asit:'}
+__COMMON_3 = {'date': ':date:', 'ref': ':ref_toc:', 'time': ':time:', 'title': ':asit:'}
 
 # --- ABOUT KEYS AND THEIR VALUES --- #
 
@@ -27,7 +27,7 @@ DAYS_KEYS["cor"] = __COMMON_1
 DAYS_KEYS["next"] = __COMMON_1
 
 SETTINGS_KEYS = {}
-SETTINGS_KEYS["general"] = {'lang': ':lang:', 'country': ':asit:', 'area': ':asit:', 'subject': ':asit:', 'city': ':asit:', 'year': ':delta_year:', 'institute': ':asit:', 'zipcode': ':asit:', 'name': ':name:'}
+SETTINGS_KEYS["general"] = {'area': ':asit:', 'city': ':asit:', 'country': ':asit:', 'institute': ':asit:', 'lang': ':lang:', 'name': ':name:', 'subject': ':asit:', 'year': ':delta_year:', 'zipcode': ':asit:'}
 SETTINGS_KEYS["monday"] = __COMMON_2
 SETTINGS_KEYS["tuesday"] = __COMMON_2
 SETTINGS_KEYS["wednesday"] = __COMMON_2

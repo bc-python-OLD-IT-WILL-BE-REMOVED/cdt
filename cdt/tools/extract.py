@@ -1,6 +1,13 @@
+#!/usr/bin/env python3
+
 import datetime
 
 from mistool.date_use import translate
+
+
+# ----------- #
+# -- TIMES -- #
+# ----------- #
 
 def datename(yearnb, monthnb, daynb, lang):
     return translate(
@@ -8,11 +15,6 @@ def datename(yearnb, monthnb, daynb, lang):
         strformat = "%A %d %B %Y",
         lang      = lang
     )
-
-
-# ----------- #
-# -- TIMES -- #
-# ----------- #
 
 def date(text):
     ...
@@ -34,10 +36,10 @@ def delta_year(text):
 def ref_book(text):
     ...
 
-def ref_perso(text):
+def ref_toc(text):
     ...
 
-def ref_toc(text):
+def ref_perso(text):
     ...
 
 

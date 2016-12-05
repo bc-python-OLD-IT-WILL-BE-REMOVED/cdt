@@ -1,15 +1,15 @@
 // The use of ``exe`` is optional !
-one_exercise::
+exercise::
     [exe] {nb_and_page_refs}
 
-one_example::
+example::
     exa {nb_and_page_refs}
 
-one_activity::
+activity::
     act {nb_and_page_refs}
 
-one_practical_work::
+practical_work::
     pw {nb_and_page_refs}
 
-one_tutorial::
+tutorial::
     tuto {nb_and_page_refs}
