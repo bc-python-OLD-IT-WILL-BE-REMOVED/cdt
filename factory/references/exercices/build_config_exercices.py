@@ -59,7 +59,9 @@ with ReadBlock(
 
 print('    * Looking for the configurations in ``exercices.txt``...')
 
-pytxt_config = [STARTING_PYFILE]
+pytxt_config    = [STARTING_PYFILE]
+pytxt_constants = []
+py_text         = []
 
 nb_and_page_refs = {}
 
@@ -105,13 +107,31 @@ for kind, specifications in infos.items():
 
 _repr = []
 
-for k in sorted(nb_and_page_refs):
-    _repr.append("{0}: {1}, ".format(repr(k), repr(nb_and_page_refs[k])))
+for shortcut in sorted(nb_and_page_refs):
+    longname = nb_and_page_refs[shortcut]
+    cte_name = longname.upper()
+
+    if shortcut:
+        pytxt_constants.append(
+            "{0} = {1}".format(
+                cte_name,
+                repr(longname)
+            )
+        )
+
+    _repr.append(
+        "{0}: {1}, ".format(
+            repr(shortcut),
+            cte_name
+        )
+    )
 
 _repr = " ".join(_repr)
 _repr = _repr[:-2]
 
 pytxt_config += [
+    "",
+    "\n".join(sorted(pytxt_constants)),
     "",
     "NB_AND_PAGE_REFS = {" + _repr + "}"
 ]

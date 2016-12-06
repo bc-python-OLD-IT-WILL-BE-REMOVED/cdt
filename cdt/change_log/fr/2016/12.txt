@@ -1,8 +1,12 @@
 ==========
-2016-12-??????
+2016-12-06
 ==========
 
-**Remodelage complet du code :** il était temps de mieux structurer le code car seule l'organisation des modules était à peu près correctement faite. Au passage, on utilise la nouvelle interface de la classe ``data.ReadBlock`` du module ¨orpyste.
+**Début du remodelage complet du code :** voici ce qui a été initié pour gérer les références des exercices (sans la prise en compte de commentaires entre des parenthèses pour le moment).
+
+    1) Création du module ``tools.extract`` qui extraira  les données isolées tapées dans un fichier brut ¨cdt. Pour le moment, seules les références à des exercices sont prises en compte.
+
+    2) Ajout du module ``tools.numbers`` pour gérer "nombres" dans les références des exercices.
 
 
 ==========
