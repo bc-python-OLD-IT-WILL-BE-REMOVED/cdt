@@ -12,10 +12,10 @@ import re
 
 from cdt.config.references.exercices import NB_AND_PAGE_REFS
 
-EMPTY_NB, INTEGER_NB, TOC_NB = range(3)
+EMPTY_NB, INTEGER_NB, TOC_NB = "empty", "integer", "toc"
 
 VAL_TAG  = "val"
-KIND_TAG = "type"
+TYPE_TAG = "type"
 
 RE_INTEGER = re.compile("^\d+$")
 RE_TOC_NB  = re.compile("^[a-zA-Z\d]*((-[a-zA-Z]+)|(-\d+))*$")
@@ -27,7 +27,7 @@ def typenb(val):
     val = val.strip()
 
     if not val:
-        return {KIND_TAG: EMPTY_NB}
+        return {TYPE_TAG: EMPTY_NB}
 
     if RE_INTEGER.search(val):
         kind = INTEGER_NB
@@ -41,6 +41,6 @@ def typenb(val):
         )
 
     return {
-        KIND_TAG: kind,
+        TYPE_TAG: kind,
         VAL_TAG : val
     }

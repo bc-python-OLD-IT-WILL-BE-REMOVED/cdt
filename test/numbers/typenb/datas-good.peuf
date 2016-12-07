@@ -1,0 +1,33 @@
+empty::
+    text::
+
+
+    infos::
+        type = EMPTY_NB
+
+
+integer::
+    text::
+        1
+
+    infos::
+        type  = INTEGER_NB
+        value = 1
+
+
+toc_1::
+    text::
+        I-1
+
+    infos::
+        type  = TOC_NB
+        value = I-1
+
+
+toc_2::
+    text::
+        C-I-1-2
+
+    infos::
+        type  = TOC_NB
+        value = C-I-1-2

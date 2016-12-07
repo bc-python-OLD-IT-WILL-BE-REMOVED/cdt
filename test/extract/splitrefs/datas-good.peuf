@@ -1,0 +1,22 @@
+no_comment::
+    text     = 1p234
+    refs     = 1p234
+    comments = :none:
+
+
+single_comment::
+    text     =     pw     p101 (one comment)
+    refs     = pw     p101
+    comments = one comment
+
+
+several_comments::
+    text =     3p101 (comment 1), 9p10 (comment 2, ok ?)   ,     exa 9p10...4p7 (comment 3)
+
+    refs = 3p101
+         | 9p10
+         | exa 9p10...4p7
+
+    comments = comment 1
+             | comment 2, ok ?
+             | comment 3

@@ -2,7 +2,7 @@
 
 """
 prototype::
-    date = 2016-12-06
+    date = 2016-12-07
 
 
 This module ???
@@ -12,15 +12,54 @@ import datetime
 import re
 
 from mistool.date_use import translate
+from mistool.string_use import between
 
 from cdt.tools.numbers import *
+
+
+# --------------- #
+# -- CONSTANTS -- #
+# --------------- #
+
+REFS_TAG, COMMENT_TAG = "refs", "comment"
 
 
 # ---------------- #
 # -- REFERENCES -- #
 # ---------------- #
 
-# focntion exclatant suivant virgule MAIS gérant parenthèse commentaire pouvant justement contenir des virgules !!!
+def splitrefs(text):
+    """
+semantic_data (verbatim comment) , semantic_data (verbatim comment) , ...
+à éclater !!!
+    """
+    text       = text.strip()
+    singlerefs = []
+
+    while(text):
+        pieces = between(
+            text = text,
+            seps = ["(", ")"]
+        )
+
+        if pieces:
+            onref, onecomment, text = pieces
+
+            singlerefs.append([onref.strip(), onecomment.strip()])
+
+            text = text.strip()
+
+            if text and not text.startswith(","):
+                raise ValueError("missing comma after one comment")
+
+            text = text[1:].strip()
+
+        else:
+            singlerefs.append([text, None])
+
+            text = ""
+
+    return singlerefs
 
 
 # ----------- #
@@ -53,7 +92,7 @@ def delta_year(text):
 
 FIRST_LETTERS = re.compile("(?P<kind>^[a-zA-Z]+)(?P<value>.*$)")
 
-def _build_onevalue(value):
+def buildoneref(value):
     """
 1p222 --> nb. 1 page 222
 1     --> nb. 1
@@ -74,15 +113,17 @@ p222  --> page 222
     if len(pieces) > 2:
         raise ValueError("too much page indicators ``p`` used")
 
+# No number for a page.
     if len(pieces) == 1:
         pieces.append(typenb(""))
 
     return pieces
 
+
 def ref_book(text):
     refs = []
 
-    for oneref in text.split(","):
+    for oneref, onecomment in splitrefs(text):
         oneref = oneref.strip()
 
 # What kind of exercices ?
@@ -118,9 +159,15 @@ def ref_book(text):
         if len(values) > 2:
             raise ValueError("too much ellipsis ``...`` used")
 
-        values = [_build_onevalue(x) for x in values]
+        values = [buildoneref(x) for x in values]
 
-        refs.append((kind, values))
+        wholerefs = {REFS_TAG: (kind, values)}
+
+# A comment ?
+        if onecomment:
+            wholerefs[COMMENT_TAG] = onecomment
+
+        refs.append(wholerefs)
 
     return refs
 
