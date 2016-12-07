@@ -1,7 +1,15 @@
-no_comment::
+no_comment_one_exe::
     text     = 1p234
     refs     = 1p234
     comments = :none:
+
+
+no_comment_two_exe::
+    text = 1p234, 5p67890
+    refs = 1p234
+         | 5p67890
+    comments = :none:
+             | :none:
 
 
 single_comment::
@@ -10,7 +18,7 @@ single_comment::
     comments = one comment
 
 
-several_comments::
+several_comments_1::
     text =     3p101 (comment 1), 9p10 (comment 2, ok ?)   ,     exa 9p10...4p7 (comment 3)
 
     refs = 3p101
@@ -20,3 +28,15 @@ several_comments::
     comments = comment 1
              | comment 2, ok ?
              | comment 3
+
+
+several_comments_2::
+     text =     3p101 , 9p10 (comment alone)   ,     exa 9p10...4p7
+
+     refs = 3p101
+          | 9p10
+          | exa 9p10...4p7
+
+     comments = :none:
+              | comment alone
+              | :none:

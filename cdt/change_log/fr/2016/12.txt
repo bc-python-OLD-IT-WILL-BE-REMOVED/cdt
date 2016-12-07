@@ -12,7 +12,7 @@
 2016-12-06
 ==========
 
-**Début du remodelage complet du code :** pour ke moment le code n'est plus du tout fonctionnel mais c'est pour la bonne causse. Voici ce qui a été initié pour gérer les références des exercices (sans la prise en compte de commentaires entre des parenthèses pour le moment).
+**Début du remodelage complet du code :** pour le moment le code n'est plus du tout fonctionnel mais c'est pour la bonne cause. Voici ce qui a été initié pour gérer les références des exercices (sans la prise en compte de commentaires entre des parenthèses pour le moment).
 
     1) Création du module ``tools.extract`` qui extraira les données isolées tapées dans un fichier brut ¨cdt. Pour le moment, seules les références à des exercices sont prises en compte.
 

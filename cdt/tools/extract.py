@@ -42,20 +42,29 @@ semantic_data (verbatim comment) , semantic_data (verbatim comment) , ...
             seps = ["(", ")"]
         )
 
+# Warning ! A comment can be preceeded by several refs without any comment.
         if pieces:
-            onref, onecomment, text = pieces
-
-            singlerefs.append([onref.strip(), onecomment.strip()])
+            somerefs, onecomment, text = pieces
 
             text = text.strip()
 
             if text and not text.startswith(","):
                 raise ValueError("missing comma after one comment")
 
+            somerefs = somerefs.split(",")
+
+            for oneref in somerefs[:-1]:
+                singlerefs.append([oneref.strip(), None])
+
+            singlerefs.append([somerefs[-1].strip(), onecomment.strip()])
+
+
             text = text[1:].strip()
 
+
         else:
-            singlerefs.append([text, None])
+            for oneref in text.split(","):
+                singlerefs.append([oneref.strip(), None])
 
             text = ""
 
