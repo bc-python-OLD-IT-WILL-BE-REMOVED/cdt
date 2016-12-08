@@ -1,8 +1,19 @@
 ==========
+2016-12-08
+==========
+
+**Factorisation du code du module ``tools.extract`` :** voici les ¨chgts.
+
+    1) Création de la fonction ``ref_nb_page`` dont le code est l'ancien code de ``ref_book``. La fonction ``ref_nb_page`` admet les alias ``ref_book`` et ``ref_lesson`` (ce choix est motivé par la différence sémantique côté utilisateur et permet aussi à long terme d'envisager une spécialisation).
+
+    2) La fonction ``splitrefs`` a été renommée ``splitwithcomment`` (elle sera aussi utilisée pour d'autres choses que des références d'exercices).
+
+
+==========
 2016-12-07
 ==========
 
-**Amélioration du module module ``tools.extract`` :** prise en compte des commentaires "verbatim" entre des parenthèses ajoutés aux références des exercices.
+**Amélioration du module ``tools.extract`` :** prise en compte des commentaires "verbatim" entre des parenthèses juste après des références d'exercices.
 
 
 **Création en continue des tests :** pour plus d'efficacité sur le long terme, la création des tests est faite dès que possible et non plus dès que l'on en a envie ! Un peu de temps perdu au jour le jour pour beaucoup de temps gagné au long cours.
@@ -25,6 +36,6 @@
 
 **Création de générateurs automatiques de codes: ** tout se passe dans le dossier path::``factory``. Voici ce qui a été fait.
 
-    1) Les noms des blocs et des clés autorisés sont définis très efficacement via un ensemble de fichiers de type ¨orpyste. Il y est aussi défini les types éventuels des clés ¨etou des valeurs.
+    1) Les noms des blocs et des clés autorisés sont définis très efficacement via un ensemble de fichiers de type ¨orpyste qui contiennent éventuellement les types des clés ¨etou de leurs valeurs.
 
     2) Les blocs de texte utilisés pour automatiser ce qui est écrit dans le cahier de texte sont maintenant gérer à part dans un dossier qu'un non programmeur peut utiliser pour traduire le cahier de texte dans une autre langue (ceci permet aussi une maintenance bien plus facile de ce qui sera affiché en français).

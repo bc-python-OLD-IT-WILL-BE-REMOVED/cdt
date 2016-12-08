@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-# The following ugly lines of codes have been build automatically.
+# The following ugly lines of codes have been build automatically from very
+# easy to modify files.
 
 DO = 'faire {some_refs}'
 EVERYTHING_BUT = 'tout sauf {some_refs}'

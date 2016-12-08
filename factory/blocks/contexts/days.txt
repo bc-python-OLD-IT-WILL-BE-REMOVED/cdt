@@ -19,4 +19,4 @@ main::
 info-train-cor-next::
     book   = :ref_book:
     perso  = :ref_perso:
-    lesson = :ref_toc:
+    lesson = :ref_lesson:

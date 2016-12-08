@@ -12,7 +12,7 @@ TESTS = {'keyval:: =': ['home', 'info', 'lesson', 'mcq', 'test']}
 
 # --- COMMON DEFINITIONS FOR KEYS AND THEIR VALUES --- #
 
-__COMMON_1 = {'book': ':ref_book:', 'lesson': ':ref_toc:', 'perso': ':ref_perso:'}
+__COMMON_1 = {'book': ':ref_book:', 'lesson': ':ref_lesson:', 'perso': ':ref_perso:'}
 
 __COMMON_2 = {':delta_time:': ':asit:'}
 

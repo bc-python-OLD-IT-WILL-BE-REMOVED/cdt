@@ -2,10 +2,11 @@
 
 """
 prototype::
-    date = 2016-12-07
+    date = 2016-12-08
 
 
-This module ???
+This module contains all the functions used to extract informations used to
+produce automated texts.
 """
 
 import datetime
@@ -28,8 +29,15 @@ REFS_TAG, COMMENT_TAG = "refs", "comment"
 # -- REFERENCES -- #
 # ---------------- #
 
-def splitrefs(text):
+def splitwithcomment(text):
     """
+property::
+    arg = str: text ;
+          ???
+
+    return = [(str, None or str)] ;
+             the
+
 semantic_data (verbatim comment) , semantic_data (verbatim comment) , ...
 à éclater !!!
     """
@@ -42,7 +50,7 @@ semantic_data (verbatim comment) , semantic_data (verbatim comment) , ...
             seps = ["(", ")"]
         )
 
-# Warning ! A comment can be preceeded by several refs without any comment.
+# Warning ! A comment can be preceded by several refs without any comment.
         if pieces:
             somerefs, onecomment, text = pieces
 
@@ -71,30 +79,6 @@ semantic_data (verbatim comment) , semantic_data (verbatim comment) , ...
     return singlerefs
 
 
-# ----------- #
-# -- TIMES -- #
-# ----------- #
-
-def datename(yearnb, monthnb, daynb, lang):
-    return translate(
-        date      = datetime.date(int(yearnb), int(monthnb), int(daynb)),
-        strformat = "%A %d %B %Y",
-        lang      = lang
-    )
-
-def date(text):
-    ...
-
-def time(text):
-    ...
-
-def delta_time(text):
-    ...
-
-def delta_year(text):
-    ...
-
-
 # ---------------- #
 # -- REFERENCES -- #
 # ---------------- #
@@ -103,6 +87,14 @@ FIRST_LETTERS = re.compile("(?P<kind>^[a-zA-Z]+)(?P<value>.*$)")
 
 def buildoneref(value):
     """
+property::
+    arg = str: text ;
+          ???
+
+    return = int ;
+             the
+
+
 1p222 --> nb. 1 page 222
 1     --> nb. 1
 p222  --> page 222
@@ -129,10 +121,18 @@ p222  --> page 222
     return pieces
 
 
-def ref_book(text):
+def ref_nb_page(text):
+    """
+property::
+    arg = str: text ;
+          ???
+
+    return = int ;
+             the
+    """
     refs = []
 
-    for oneref, onecomment in splitrefs(text):
+    for oneref, onecomment in splitwithcomment(text):
         oneref = oneref.strip()
 
 # What kind of exercices ?
@@ -181,12 +181,24 @@ def ref_book(text):
     return refs
 
 
-def ref_toc(text):
-    ...
+# Different semantic meanings but with the same way to be used. This is why
+# we decide to use different names (this is for the long term).
+
+ref_book = ref_lesson = ref_nb_page
 
 
 def ref_perso(text):
-    ...
+    """
+    ???
+    """
+    raise NotImplementedError("TODO !!!!")
+
+
+def ref_toc(text):
+    """
+    ???
+    """
+    raise NotImplementedError("TODO !!!!")
 
 
 # ------------- #
@@ -194,7 +206,57 @@ def ref_perso(text):
 # ------------- #
 
 def lang(text):
-    ...
+    """
+    ???
+    """
+    raise NotImplementedError("TODO !!!!")
 
 def name(text):
-    ...
+    """
+    ???
+    """
+    raise NotImplementedError("TODO !!!!")
+
+
+# ----------- #
+# -- TIMES -- #
+# ----------- #
+
+def datename(yearnb, monthnb, daynb, lang):
+    """
+property::
+    arg = str: text ;
+          ???
+
+    return = int ;
+             the
+    """
+    return translate(
+        date      = datetime.date(int(yearnb), int(monthnb), int(daynb)),
+        strformat = "%A %d %B %Y",
+        lang      = lang
+    )
+
+def date(text):
+    """
+    ???
+    """
+    raise NotImplementedError("TODO !!!!")
+
+def time(text):
+    """
+    ???
+    """
+    raise NotImplementedError("TODO !!!!")
+
+def delta_time(text):
+    """
+    ???
+    """
+    raise NotImplementedError("TODO !!!!")
+
+def delta_year(text):
+    """
+    ???
+    """
+    raise NotImplementedError("TODO !!!!")

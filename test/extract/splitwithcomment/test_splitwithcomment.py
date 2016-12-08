@@ -24,7 +24,7 @@ from cdt.tools import extract
 
 THIS_DIR = PPath(__file__).parent
 
-SPLITREFS = extract.splitrefs
+SPLITWITHCOMMENT = extract.splitwithcomment
 
 
 # ----------------------- #
@@ -65,7 +65,7 @@ def test_extract_splitrefs_bad(or_datas):
 
     for testname, keysvalues in infos.mydict("tree std nosep nonb").items():
         with raises(ValueError):
-            SPLITREFS(keysvalues["text"])
+            SPLITWITHCOMMENT(keysvalues["text"])
 
 
 # ------------------ #
@@ -94,6 +94,6 @@ def test_extract_splitrefs_good(or_datas):
             [r, c] for r, c in zip(refs_wanted, comments_wanted)
         ]
 
-        infosfound = SPLITREFS(text)
+        infosfound = SPLITWITHCOMMENT(text)
 
         assert infoswanted == infosfound

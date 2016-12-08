@@ -28,7 +28,8 @@ PY_LANG_DIR  = parent / 'cdt/config/lang'
 STARTING_PYFILE = """
 #!/usr/bin/env python3
 
-# The following ugly lines of codes have been build automatically.
+# The following ugly lines of codes have been build automatically from very
+# easy to modify files.
 """.lstrip()
 
 PEUF_DIRS  = {}

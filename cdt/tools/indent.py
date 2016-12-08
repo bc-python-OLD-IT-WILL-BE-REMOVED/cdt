@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
 
 
+"""
+prototype::
+    date = 2016-12-06
+
+
+This module only contains the function ``manage`` which deals with indentations
+of texts.
+"""
+
+
 def manage(line):
     """
 property::
+    arg = str: line
 
-    action = the level of indention is calculated and the leading indentation
-
-             of ``line`` is removed (one tabulation is exactly equal to
-
-             four spaces).
-
+    return = (int, str) ;
+             the level of indention and the ``line`` stripped (one tabulation
+             is exactly equal to four spaces).
     """
     line = line.rstrip()
 
