@@ -37,7 +37,7 @@ STARTING_PYFILE = """
 
 PEUF_FILE = THIS_DIR / 'exercices.txt'
 
-MODE = {"verbatim"  : ":default:"}
+MODE = "verbatim"
 
 
 # --------------------- #
@@ -120,14 +120,14 @@ for shortcut in sorted(nb_and_page_refs):
         )
 
     _repr.append(
-        "{0}: {1}, ".format(
+        "{0}: {1},".format(
             repr(shortcut),
             cte_name
         )
     )
 
 _repr = " ".join(_repr)
-_repr = _repr[:-2]
+_repr = _repr[:-1]
 
 pytxt_config += [
     "",

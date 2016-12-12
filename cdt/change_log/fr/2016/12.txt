@@ -1,4 +1,11 @@
 ==========
+2016-12-12
+==========
+
+**Création des ¨docs techniques :** tout ce qui est en train d'être refait à neuf est maintenant techniquement documenté. Tout comme les tests, les ¨docs techniques seront mises à jour en continue et non quand l'envie se fait sentir.
+
+
+==========
 2016-12-08
 ==========
 

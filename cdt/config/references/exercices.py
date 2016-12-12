@@ -8,4 +8,4 @@ EXERCISE = 'exercise'
 PRACTICAL_WORK = 'practical_work'
 TUTORIAL = 'tutorial'
 
-NB_AND_PAGE_REFS = {'': EXERCISE,  'act': ACTIVITY,  'exa': EXAMPLE,  'exe': EXERCISE,  'pw': PRACTICAL_WORK,  'tuto': TUTORIAL}
+NB_AND_PAGE_REFS = {'': EXERCISE, 'act': ACTIVITY, 'exa': EXAMPLE, 'exe': EXERCISE, 'pw': PRACTICAL_WORK, 'tuto': TUTORIAL}
