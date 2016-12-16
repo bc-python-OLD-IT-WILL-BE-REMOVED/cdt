@@ -2,7 +2,7 @@
 
 """
 prototype::
-    date = 2016-12-08
+    date = 2016-12-15
 
 
 This module contains all the functions needed to extract semantic informations.
@@ -22,30 +22,66 @@ from cdt.tools.numbers import *
 # --------------- #
 
 REFS_TAG, COMMENT_TAG = "refs", "comment"
+TITLE_TAG, LINKS_TAG = "title", "links"
 
 
-# ---------------- #
-# -- REFERENCES -- #
-# ---------------- #
+# ----------- #
+# -- TOOLS -- #
+# ----------- #
 
-def splitwithcomment(text):
+def splitit(text, sep = ","):
+    """
+property::
+    arg = str: text ;
+          a string to be splitted regarding the string ``sep``
+    arg = str: sep = "," ;
+          the string used to split the text
+
+    return = [str, ...] ;
+             a list of none empty stripped strings found after spliting
+             ``text`` regarding the string ``sep``
+
+
+warning::
+    If an empty piece of stripped text is found during the spliting, an error
+    will be raised.
+    """
+    pieces = []
+
+    for onepiece in text.split(sep):
+        onepiece = onepiece.strip()
+
+        if not onepiece:
+            raise ValueError(
+                "empty piece found for texts separated by << {0} >>".format(sep)
+            )
+
+        pieces.append(onepiece)
+
+    return pieces
+
+
+def splitwithextra(text, seps = ['(', ')']):
     """
 property::
     arg = str: text ;
           a string to be splitted regarding comas with the possibility to use
           comments by puting them inside braces
+    arg = [str, str]: seps = ['(', ')'] ;
+          this list gives teh delimiters of the extra infos (for example this
+          are braces for comments and hooks for links)
 
     return = [(str, None or str)] ;
              a list of tuples which look like either ``("piece of text", "one
-             comment")``, or ``("piece of text", None)`` if no comment has been
-             used
+             extra info")``, or ``("piece of text", None)`` if ther is no extra
+             informations
 
 
 The folloiwng lines give an example (the output has been hand formatted).
 
 pyterm::
     >>> from cdt.tools import extract
-    >>> print(extract.splitwithcomment(
+    >>> print(extract.splitwithextra(
     ...     "piece 1, piece 2 (comment 1), piece 3 (comment 2)"
     ... ))
     [
@@ -53,14 +89,22 @@ pyterm::
         ['piece 2', 'comment 1'],
         ['piece 3', 'comment 2']
     ]
+    >>> print(
+    ...     extract.splitwithextra(
+    ...         text = "one title [link]",
+    ...         spes = ['[', ']']
+    ...     )
+    ... )
+    [
+        ['one title', 'link']
+    ]
     """
-    text       = text.strip()
-    piecesandco = []
+    text = text.strip()
 
     while(text):
         beforeinafter = between(
             text = text,
-            seps = ["(", ")"]
+            seps = seps
         )
 
 # Warning ! A comment can be preceded by several refs without any comment.
@@ -70,24 +114,22 @@ pyterm::
             text = text.strip()
 
             if text and not text.startswith(","):
-                raise ValueError("missing comma after one comment")
+                raise ValueError(
+                    "illegal text after a group {0[0]}...{0[1]}".format(seps)
+                )
 
-            somepieces = somepieces.split(",")
+            somepieces = splitit(somepieces)
 
             for oneref in somepieces[:-1]:
-                piecesandco.append([oneref.strip(), None])
+                yield [oneref, None]
 
-            piecesandco.append([somepieces[-1].strip(), onecomment.strip()])
-
-            text = text[1:].strip()
+            yield [somepieces[-1], onecomment.strip()]
 
         else:
-            for oneref in text.split(","):
-                piecesandco.append([oneref.strip(), None])
+            for oneref in splitit(text):
+                yield [oneref, None]
 
             text = ""
-
-    return piecesandco
 
 
 # ---------------- #
@@ -151,9 +193,9 @@ pyterm::
     return pieces
 
 
-def ref_nb_page(text):
+def refs_nb_page(text):
     """
-    see = splitwithcomment, buildoneref
+    see = splitwithextra, buildoneref
 
     arg = str: text ;
           several references for numbered exercices with eventually additional
@@ -177,27 +219,30 @@ pyterm::
     ...     "3p101, exa 9p10...4 (comment 2)"
     ... ))
     [
-        {'refs': ('exercise', [
-            [{'text': '3', 'type': 'integer'},
-             {'text': '101', 'type': 'integer'}]
-        ])},
-        {'comment': 'comment 2',
-         'refs'   : ('example', [
-            [{'text': '9', 'type': 'integer'},
-             {'text': '10', 'type': 'integer'}],
-            [{'text': '4', 'type': 'integer'},
-             {'type': 'empty'}]
-        ])}
+        {
+            'refs': (
+                'exercise', [
+                    [{'text': '3', 'type': 'integer'},
+                     {'text': '101', 'type': 'integer'}]
+                ]
+            )
+        },
+        {
+            'comment': 'comment 2',
+            'refs'   : (
+                'example', [
+                    [{'text': '9', 'type': 'integer'},
+                     {'text': '10', 'type': 'integer'}],
+                    [{'text': '4', 'type': 'integer'},
+                     {'type': 'empty'}]
+                ]
+            )
+        }
     ]
-
-
-info::
-    ``ref_book`` and ``ref_lesson`` are alias of the function ``ref_nb_page``
-    (this choice is motivated because of semantic reasons).
-             """
+    """
     refs = []
 
-    for oneref, onecomment in splitwithcomment(text):
+    for oneref, onecomment in splitwithextra(text):
         oneref = oneref.strip()
 
 # What kind of exercices ?
@@ -246,41 +291,104 @@ info::
     return refs
 
 
-# Different semantic meanings but with the same way to be used. This is why
-# we decide to use different names (this is for the long term).
-
-ref_book = ref_lesson = ref_nb_page
-
-
-def ref_perso(text):
+def refs_perso(text):
     """
-    ???
-    """
-    raise NotImplementedError("TODO !!!!")
+prototype::
+    see = splitwithextra
+
+    arg = str: text ;
+          several personal references that are documents eventually with links
+          to them
+
+    return = [dict] ;
+             a list of dictionary having always the key ``TITLE_TAG`` with
+             corresponding value a string indicating the title of a document.
+             If some links separated by semi-colons have been indicated,
+             they are translated to a list of strings which will be the value
+             of the additional key ``LINKS_TAG``.
+             And if a comment has been indicated, the corresponding content
+             will be the value of the additional key ``COMMENT_TAG``.
 
 
-def ref_toc(text):
+The following example shows how the the values returned look like (the output
+has been hand formatted).
+
+pyterm::
+    >>> from cdt.tools import extract
+    >>> print(extract.ref_perso(
+    ...     "1ST title, 2nd title [linktoit] (just a comment)"
+    ... ))
+    [
+        {'title': '1ST title'},
+        {
+            'title'  : '2nd title',
+            'links'  : ['linktoit'],
+            'comment': 'just a comment'
+        }
+    ]
     """
-    ???
+    refs = []
+
+    for oneref, onecomment in splitwithextra(text):
+        for title, links in splitwithextra(
+            text = oneref,
+            seps = ['[', ']']
+        ):
+            wholerefs = {TITLE_TAG: title}
+
+# Some links ?
+            if links is not None:
+                links = links.strip()
+
+                if not links:
+                    raise ValueError("no links inside [...]")
+
+                links = splitit(
+                    text = links,
+                    sep  = ";"
+                )
+
+                wholerefs[LINKS_TAG] = links
+
+# A comment ?
+            if onecomment:
+                wholerefs[COMMENT_TAG] = onecomment
+
+            refs.append(wholerefs)
+
+    return refs
+
+
+def refs_toc(tex):
     """
-    raise NotImplementedError("TODO !!!!")
+pour reference dans les DS !!!
+
+soit une ref toc soit un texte pour cas particulier
+    """
+    raise NotImplementedError("Not available for the moment")
 
 
 # ------------- #
 # -- GENERAL -- #
 # ------------- #
 
+def url(text):
+    """
+    ???
+    """
+    raise NotImplementedError("Not available for the moment")
+
 def lang(text):
     """
     ???
     """
-    raise NotImplementedError("TODO !!!!")
+    raise NotImplementedError("Not available for the moment")
 
-def name(text):
+def names(text):
     """
     ???
     """
-    raise NotImplementedError("TODO !!!!")
+    raise NotImplementedError("Not available for the moment")
 
 
 # ----------- #
@@ -301,22 +409,16 @@ def date(text):
     """
     ???
     """
-    raise NotImplementedError("TODO !!!!")
+    raise NotImplementedError("Not available for the moment")
 
 def time(text):
     """
     ???
     """
-    raise NotImplementedError("TODO !!!!")
+    raise NotImplementedError("Not available for the moment")
 
-def delta_time(text):
+def year(text):
     """
     ???
     """
-    raise NotImplementedError("TODO !!!!")
-
-def delta_year(text):
-    """
-    ???
-    """
-    raise NotImplementedError("TODO !!!!")
+    raise NotImplementedError("Not available for the moment")

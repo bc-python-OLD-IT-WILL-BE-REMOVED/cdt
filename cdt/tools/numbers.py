@@ -41,7 +41,7 @@ property::
     kindfound = ""
 
     for kind, regex in [
-        (INTEGER_NB, RE_INTEGER_NB), # << WARNING ! >> The 1st regex to test.
+        (INTEGER_NB, RE_INTEGER_NB), # WARNING ! This the 1ST regex to test.
         (TOC_NB, RE_TOC_NB),
     ]:
         if regex.search(oneref):

@@ -40,7 +40,7 @@ PEUF_DIR = THIS_DIR / 'contexts'
 
 MODE = {
     "verbatim"  : ":default:",
-    "keyval:: :": ["keyval", "verbatim"],
+    "keyval:: :": ["keyval", "verbatim", "containers"],
     "container" : "main"
 }
 
@@ -92,6 +92,21 @@ def extractnames(names):
             namesfound += splitit(inside)
 
             names = names.strip()
+
+# Do we use ``--->`` ?
+            if names.startswith("-->"):
+                alias, *names = [
+                    x.strip()
+                    for x in names[3:].split(" ")
+                    if x.strip()
+                ]
+                print("alias --->", alias)
+
+                if names:
+                    names = " ".join(names)
+
+                else:
+                    names = ""
 
 # Single list of values !
     containers = list(set(containers))

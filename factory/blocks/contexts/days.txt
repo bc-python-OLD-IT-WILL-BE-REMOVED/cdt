@@ -5,18 +5,23 @@
 main::
     keyval::
         seps : =
-        names: train
+        names: absence
+               train
                cor
                next
                info
 
     verbatim::
-        names: absence
-               comment
+        names: comment
                lesson
 
 
 info-train-cor-next::
-    book   = :ref_book:
-    perso  = :ref_perso:
-    lesson = :ref_lesson:
+    book lesson = :refs_nb_page:
+    perso       = :refs_perso:
+
+
+absence::
+    date   = :date:
+    period = :time:
+    reason

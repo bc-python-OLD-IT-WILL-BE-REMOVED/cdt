@@ -6,15 +6,13 @@ main::
     keyval::
         seps : =
         names: general  abrev
-               class    contexts
+               classes  groups   periods
 
-// Here we use a none recursive shortcut so as to not write ``schedule/monday``,
-// ``schedule/tuesday``, and so on...
-// We also indicate at the same time that ``schedule`` is a container.
-               schedule/(
-                   monday  tuesday  wednesday  thursday
-                   friday  saturday  sunday
-               )
+               regpath::schedule/[mon|tues|wednes|thurs|fri|satur|sun]day
+                    :alias: days
+
+               books/*/*
+                    :alias: bookrefs
 
 
 // The keys to use in the key-val blocks (the missing blocks are the ones
@@ -34,9 +32,9 @@ main::
 //       and the values are just raw strings.
 
 general::
-    year = :delta_year:
+    year = :year:
     lang = :lang:
-    name = :name:
+    name = :names:
     subject
     country
     city
@@ -44,5 +42,15 @@ general::
     area
     institute
 
-monday-tuesday-wednesday-thursday-friday-saturday-sunday::
-    :delta_time:
+
+days::
+    :time:
+
+
+bookrefs::
+    authors = :names:
+    year    = :year:
+    link    = :url:
+    title
+    editor
+    collection

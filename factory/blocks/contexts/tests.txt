@@ -15,5 +15,5 @@ main::
 lesson-home-test-info-mcq::
     date  = :date:
     time  = :time:
+    ref   = :refs_toc:
     title
-    ref   = :ref_toc:

@@ -1,4 +1,34 @@
 ==========
+2016-12-16
+==========
+
+**Modification du code du module ``tools.extract`` :** voici ce qui a été fait.
+
+    1) Abandon des alias ``ref_book`` et ``ref_lesson`` de la fonction ``ref_nb_page`` car cela ne semble pas utile pour le moment.
+
+    2) Les fonctions ``ref_nb_page`` et ``ref_perso`` ont été renommées plus logiquement ``refs_nb_page`` et ``refs_perso``.
+
+
+==========
+2016-12-15
+==========
+
+**Suite de la fabrication du module ``tools.extract`` :** voici ce qui a été fait.
+
+    1) Ajout de la fonction ``ref_perso`` pour la gestion des documents du professeur (avec éventuellement des fichiers associés localement ou via un lien).
+
+    2) La fonction ``splitwithcomment`` qui devient ``splitwithextra`` a subi les ¨chgts suivants.
+
+        a) On peut choisir des délimiteurs autres que des parenthèses pour les ¨infos supplémentaires (¨cf le point précédent).
+
+        b) La fonction est devenue un générateur.
+
+        c) Les textes vides non voulus sont maintenant gérées via l'envoi d'un message d'erreur. Penser par exemple à ``", 1p3 (un commentaire)"`` où à ``"1p3 ( )"``. En fait leboulot est fait par  (voir ci-dessous).
+
+    3) Pour mieux factoriser le code, une ¨nelle fonction ``splitit`` a été ajoutée. Celle-ci n'accepte pas que des textes vides, après nettoyage des espaces extrêmes, soient trouvés.
+
+
+==========
 2016-12-12
 ==========
 
