@@ -1,4 +1,11 @@
 ==========
+2016-12-17
+==========
+
+**Petite ¨maj de la fonction ``refs_perso`` du module ``tools.extract`` :** il a fallu implémenter la possibilité d'associer localement un document personnel à une référence, comme des chapitres ou des sections du cours, ou bien un contexte très particulier décrit par l'utilisateur.
+
+
+==========
 2016-12-16
 ==========
 
@@ -6,7 +13,7 @@
 
     1) Abandon des alias ``ref_book`` et ``ref_lesson`` de la fonction ``ref_nb_page`` car cela ne semble pas utile pour le moment.
 
-    2) Les fonctions ``ref_nb_page`` et ``ref_perso`` ont été renommées plus logiquement ``refs_nb_page`` et ``refs_perso``.
+    2) Les fonctions ``ref_nb_page`` et ``ref_perso`` ont été renommées plus logiquement ``refs_nb_page`` et ``refs_perso`` (noter les "s").
 
 
 ==========
@@ -23,9 +30,9 @@
 
         b) La fonction est devenue un générateur.
 
-        c) Les textes vides non voulus sont maintenant gérées via l'envoi d'un message d'erreur. Penser par exemple à ``", 1p3 (un commentaire)"`` où à ``"1p3 ( )"``. En fait leboulot est fait par  (voir ci-dessous).
+        c) Les textes vides non voulus sont maintenant gérées via l'envoi d'un message d'erreur. Penser par exemple à ``", 1p3 (un commentaire)"`` où à ``"1p3 ( )"``. En fait le boulot est fait par ``splitit`` (voir ci-dessous).
 
-    3) Pour mieux factoriser le code, une ¨nelle fonction ``splitit`` a été ajoutée. Celle-ci n'accepte pas que des textes vides, après nettoyage des espaces extrêmes, soient trouvés.
+    3) Pour mieux factoriser le code, une ¨nelle fonction ``splitit`` a été ajoutée. Celle-ci n'accepte pas la présence de textes vides après nettoyage des espaces extrêmes.
 
 
 ==========

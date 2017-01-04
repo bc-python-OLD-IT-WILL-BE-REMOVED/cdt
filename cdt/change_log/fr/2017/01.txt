@@ -1,0 +1,9 @@
+==========
+2017-01-01
+==========
+
+**Amélioration du code du module ``tools.extract`` :** deux choses importantes ont été faites.
+
+    1) Les différents types de références ont dorénavant tous le même fonctionnement : utilisation possible de liens, de commentaires ¨etou de références (¨cf ci-dessous). Le boulot d'analyse a été centralisé dans une "super" fonction ``build_some_refs`` qui est appelée en coulisse par ``refs_nb_page`` et ``refs_perso`` via de bons paramètres.
+
+    2) La fonction ``splitwithextra`` a été renommée ``splitwithextras`` avec un "s" car dorénavant elle prend en compte à la fois les liens, les commentaires et les références. Ceci a permis au passage de ne plus imposer l'ordre d'utilisation de ces infos facultatives supplémentaires. En coulisse on utilise ``_splitwithextras`` une classe "appelable"  (implémentation de la méthode magique ``__call__``).

@@ -1,5 +1,5 @@
 // The use of ``exe`` is optional !
-exercise::
+exercice::
     [exe] {nb_and_page_refs}
 
 example::

@@ -3,7 +3,7 @@ empty::
 
 
     infos::
-        type = EMPTY_NB
+        type = NONE_NB
 
 
 integer::
@@ -11,7 +11,7 @@ integer::
         1
 
     infos::
-        type  = INTEGER_NB
+        type  = INT_NB
         value = 1
 
 

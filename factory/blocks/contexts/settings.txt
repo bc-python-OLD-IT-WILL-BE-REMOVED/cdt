@@ -32,7 +32,7 @@ main::
 //       and the values are just raw strings.
 
 general::
-    year = :year:
+    year = :years:
     lang = :lang:
     name = :names:
     subject
@@ -48,9 +48,9 @@ days::
 
 
 bookrefs::
-    authors = :names:
-    year    = :year:
-    link    = :url:
+    author = :names:
+    year   = :years:
+    link   = :links:
     title
     editor
     collection

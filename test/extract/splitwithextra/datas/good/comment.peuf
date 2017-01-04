@@ -1,0 +1,35 @@
+single_comment::
+    input::
+        pw     p101     (   one comment       )
+
+    output::
+        value    = pw     p101
+        comments = one comment
+
+
+several_comments::
+    input::
+        3p101 (comment 1), 9p10 (comment 2, ok ?)   , exa 9p10...4p7 (comment 3)
+
+    output::
+        value    = 3p101
+        comments = comment 1
+
+        value    = 9p10
+        comments = comment 2, ok ?
+
+        value    = exa 9p10...4p7
+        comments = comment 3
+
+
+one_isolated_comment::
+    input::
+        3p101 , 9p10 (comment alone)   ,     exa 9p10...4p7
+
+    output::
+        value = 3p101
+
+        value    = 9p10
+        comments = comment alone
+
+        value = exa 9p10...4p7

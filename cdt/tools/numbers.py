@@ -13,13 +13,13 @@ import re
 
 from cdt.config.references.exercices import NB_AND_PAGE_REFS
 
-EMPTY_NB, INTEGER_NB, TOC_NB = "empty", "integer", "toc"
+NONE_NB, INT_NB, TOC_NB = "none", "int", "toc"
 
-VAL_TAG  = "text"
+VAL_TAG  = "value"
 TYPE_TAG = "type"
 
-RE_INTEGER_NB = re.compile("^\d+$")
-RE_TOC_NB     = re.compile("^[a-zA-Z\d]*((-[a-zA-Z]+)|(-\d+))*$")
+RE_INT_NB = re.compile("^\d+$")
+RE_TOC_NB = re.compile("^[a-zA-Z\d]*((-[a-zA-Z]+)|(-\d+))*$")
 
 def typenb(oneref):
     """
@@ -28,20 +28,20 @@ property::
           ``oneref`` should indicate a numbered reference that can be empty.
 
     return = {str: str} ;
-             the function returns ``{TYPE_TAG: EMPTY_NB}`` if ``oneref`` is
+             the function returns ``{TYPE_TAG: NONE_NB}`` if ``oneref`` is
              empty, or either ``{TYPE_TAG: TOC_NB, VAL_TAG : text}``, or
-             ``{TYPE_TAG: INTEGER_NB, VAL_TAG : text}`` where the string
+             ``{TYPE_TAG: INT_NB, VAL_TAG : text}`` where the string
              ``text`` is striped.
     """
     oneref = oneref.strip()
 
     if not oneref:
-        return {TYPE_TAG: EMPTY_NB}
+        return {TYPE_TAG: NONE_NB}
 
     kindfound = ""
 
     for kind, regex in [
-        (INTEGER_NB, RE_INTEGER_NB), # WARNING ! This the 1ST regex to test.
+        (INT_NB, RE_INT_NB), # WARNING ! This the 1ST regex to test.
         (TOC_NB, RE_TOC_NB),
     ]:
         if regex.search(oneref):

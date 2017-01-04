@@ -10,6 +10,7 @@ main::
                cor
                next
                info
+               setup
 
     verbatim::
         names: comment
@@ -22,6 +23,10 @@ info-train-cor-next::
 
 
 absence::
-    date   = :date:
-    period = :time:
+    date   = :dates:
+    period = :times:
     reason
+
+setup::
+    ref    = :refs_toc:
+    period = thisday , fromnow

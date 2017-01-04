@@ -2,10 +2,15 @@
 
 """
 prototype::
-    date = 2016-12-15
+    date = 2017-01-01
 
 
-This module contains all the functions needed to extract semantic informations.
+This module contains all the functions needed to extract informations.
+
+
+warning::
+    Here we just build intermediate representations of the infos found (others
+    modules are used to really analyse the datas).
 """
 
 import datetime
@@ -21,8 +26,11 @@ from cdt.tools.numbers import *
 # -- CONSTANTS -- #
 # --------------- #
 
-REFS_TAG, COMMENT_TAG = "refs", "comment"
-TITLE_TAG, LINKS_TAG = "title", "links"
+SEPARATOR = "|"
+
+NB_PAGE_TAG, TITLE_TAG = "nbpage", "title"
+
+COMMENTS_TAG, CONTEXTS_TAG, LINKS_TAG = "comments", "contexts", "links"
 
 
 # ----------- #
@@ -37,14 +45,14 @@ property::
     arg = str: sep = "," ;
           the string used to split the text
 
-    return = [str, ...] ;
-             a list of none empty stripped strings found after spliting
-             ``text`` regarding the string ``sep``
+    return = list(str) ;
+             one list of none empty stripped strings found after spliting
+             ``text`` regarding to the string ``sep``
 
 
 warning::
-    If an empty piece of stripped text is found during the spliting, an error
-    will be raised.
+    If an empty piece text is found during the spliting, an error will be
+    raised.
     """
     pieces = []
 
@@ -53,7 +61,8 @@ warning::
 
         if not onepiece:
             raise ValueError(
-                "empty piece found for texts separated by << {0} >>".format(sep)
+                "empty piece found for texts separated " +
+                "by << {0} >>".format(sep)
             )
 
         pieces.append(onepiece)
@@ -61,75 +70,158 @@ warning::
     return pieces
 
 
-def splitwithextra(text, seps = ['(', ')']):
+class _splitwithextras():
     """
 property::
-    arg = str: text ;
-          a string to be splitted regarding comas with the possibility to use
-          comments by puting them inside braces
-    arg = [str, str]: seps = ['(', ')'] ;
-          this list gives teh delimiters of the extra infos (for example this
-          are braces for comments and hooks for links)
-
-    return = [(str, None or str)] ;
-             a list of tuples which look like either ``("piece of text", "one
-             extra info")``, or ``("piece of text", None)`` if ther is no extra
-             informations
+    see = splitwithextras, self.__call__
 
 
-The folloiwng lines give an example (the output has been hand formatted).
+This class mainly implements the magic method ``__call__`` and **it is used via
+the function ``splitwithextras = _splitwithextras()``** which builds a list of
+dictionaries indicating pieces of text separetd by commas with optional extra
+infos adding via either ``(...)``, or ``[...]``, or ``{...}``.
+
+
+The following lines give examples of values returned when using directly the
+function ``splitwithextras`` (the outputs have been hand formatted).
 
 pyterm::
     >>> from cdt.tools import extract
-    >>> print(extract.splitwithextra(
-    ...     "piece 1, piece 2 (comment 1), piece 3 (comment 2)"
+    >>> print(extract.splitwithextras(
+    ...     "piece of text (comment) [one link] {one reference}"
     ... ))
     [
-        ['piece 1', None],
-        ['piece 2', 'comment 1'],
-        ['piece 3', 'comment 2']
+        {
+            'value'   : 'piece of text',
+            'comments': 'comment',
+            'contexts': 'one reference',
+            'links'   : 'one link'
+        }
     ]
-    >>> print(
-    ...     extract.splitwithextra(
-    ...         text = "one title [link]",
-    ...         spes = ['[', ']']
-    ...     )
-    ... )
+    >>> print(extract.splitwithextras(
+    ...     "piece 1, piece 2 (comment for 2), piece 3 (comment for 3), alone"
+    ... ))
     [
-        ['one title', 'link']
+        {'value': 'piece 1'},
+        {'value': 'piece 2', 'comments': 'comment for 2'},
+        {'value': 'piece 3', 'comments': 'comment for 3'},
+        {'value': 'alone'}
     ]
+
+info::
+    The strings ``'comments'``, ``'contexts'`` and ``'links'`` are stored in
+    the constants ``COMMENTS_TAG``, ``CONTEXTS_TAG`` and ``LINKS_TAG``.
     """
-    text = text.strip()
 
-    while(text):
-        beforeinafter = between(
-            text = text,
-            seps = seps
-        )
+    SEPS = {
+        COMMENTS_TAG: ["(", ")"],
+        CONTEXTS_TAG: ["{", "}"],
+        LINKS_TAG   : ["[", "]"]
+    }
 
-# Warning ! A comment can be preceded by several refs without any comment.
-        if beforeinafter:
-            somepieces, onecomment, text = beforeinafter
+    SEPS_NAMES = {
+        v[0]: k for k, v in SEPS.items()
+    }
 
-            text = text.strip()
+    FIRST_DELIMS = {
+        v[0]: v for _, v in SEPS.items()
+    }
 
-            if text and not text.startswith(","):
+    def _add_info(self, text):
+        """
+property::
+    arg = str: text ;
+          a text using eventuallt comas to seprate pieces
+
+    action = appendding to ``self.infosfound`` the pieces of text found after
+             splitting the argument ``text`` regarding to comas
+        """
+        if text:
+            if text[0] == ",":
+                if self.shiftpos:
+                    text = text[1:]
+
+                self.infosfound += [{'value': x} for x in splitit(text)]
+
+            elif self.shiftpos:
                 raise ValueError(
-                    "illegal text after a group {0[0]}...{0[1]}".format(seps)
+                    "illegal text after a group {0[0]}...{0[1]}".format(
+                        self.FIRST_DELIMS[self.last_first_delims]
+                    )
                 )
 
-            somepieces = splitit(somepieces)
+            else:
+                self.infosfound = [{'value': x} for x in splitit(text)]
 
-            for oneref in somepieces[:-1]:
-                yield [oneref, None]
 
-            yield [somepieces[-1], onecomment.strip()]
+    def __call__(self, text):
+        """
+property::
+    arg = str: text ;
+          one text containing pieces of text with optional comments ``(...)``,
+          references ``{...}`` and links ``[...]``.
 
-        else:
-            for oneref in splitit(text):
-                yield [oneref, None]
+    return = list(dict(str: str)) ;
+             this method builds and returns the list ``self.infosfound`` which
+             contains all the pieces with eventually their extra informations
+             (comments , references and links)
+        """
+        self.infosfound = []
+        self.text       = text.strip()
 
-            text = ""
+# Looking for the most left delimiter. We do merely all by hand !
+        self.shiftpos = 0
+        self.after    = self.text
+
+        for self.pos, self.char in enumerate(self.text):
+# Some extra stuffs to find.
+            if self.char in self.FIRST_DELIMS:
+                self.last_first_delims = self.char
+
+                self.before, self.inside, self.after = between(
+                    text = self.text[self.pos:],
+                    seps = self.FIRST_DELIMS[self.char]
+                )
+
+# Is ``before`` good ?
+                self.before = self.text[self.shiftpos:self.pos] + self.before
+                self.before = self.before.strip()
+
+                self._add_info(self.before)
+
+                if not self.infosfound:
+                    raise ValueError(
+                        "missing text before a group {0[0]}...{0[1]}".format(
+                            self.FIRST_DELIMS[self.char]
+                        )
+                    )
+
+# Next position.
+                self.shiftpos = self.pos + len(self.inside) + 2
+
+# Extra infos.
+                kind = self.SEPS_NAMES[self.char]
+
+                if kind in self.infosfound[-1]:
+                    raise ValueError(
+                        "at least two groups {0[0]}...{0[1]} used".format(
+                            self.FIRST_DELIMS[self.char]
+                        )
+                    )
+
+                self.infosfound[-1][kind] = self.inside.strip()
+
+# For the last part alone.
+                self.after = self.after.strip()
+
+# Last part alone ?
+        self._add_info(self.after)
+
+# The job is done.
+        return self.infosfound
+
+
+splitwithextras = _splitwithextras()
 
 
 # ---------------- #
@@ -138,18 +230,159 @@ pyterm::
 
 FIRST_LETTERS = re.compile("(?P<kind>^[a-zA-Z]+)(?P<value>.*$)")
 
-def buildoneref(value):
+def build_some_refs(text, refbuilder):
+    """
+prototype::
+    see = refs_nb_page , refs_perso
+
+    arg = str: text ;
+          a text using commas to separate pieces of infos where each info can
+          have a comment inside ``(...)``, some links inside ``[...]`` and/or
+          contexts ``{...}``.
+    arg = func: refbuilder ;
+          this function is used to pre-analyzed each pieces of infos found
+
+    return = list(dict) ;
+             a list of dictionary with infos ready to be truly analyzed
+
+
+info::
+    For examples of what can be done with ``build_some_refs``, take a look at the
+    documentations of the functions ``refs_nb_page`` and ``refs_perso``.
+    """
+    infos = splitwithextras(text)
+
+    for i, oneinfo in enumerate(infos):
+# Build the intermediate references from the value.
+        value = oneinfo['value']
+        del oneinfo['value']
+
+        kind, value    = refbuilder(value)
+        infos[i][kind] = value
+
+# Build the intermediate links and contexts.
+        for tag in [CONTEXTS_TAG, LINKS_TAG]:
+            if tag in oneinfo:
+                infos[i][tag] = splitit(
+                    text = oneinfo[tag],
+                    sep  = SEPARATOR
+                )
+
+    return infos
+
+
+def refs_nb_page(text):
+    """
+prototype::
+    see = build_some_refs , build_nb_page
+
+    arg = str: text ;
+          a text using commas to separate different kinds of exercices with optional comment inside ``(...)``, links inside ``[...]`` and contexts ``{...}``.
+
+    return = list(dict) ;
+             a list of dictionary having always a key indicating the kind of
+             exercice with corresponding value a list giving the number and
+             page for the exercice.
+             The optional keys key ``LINKS_TAG``, key ``COMMENTS_TAG`` and
+             ``CONTEXTS_TAG`` can appear if ``[...]``, ``(...)`` and ``{...}``
+             respectively have been used.
+
+
+The following example shows how the the values returned look like (the output
+has been hand formatted). All the job is done by the functions ``build_some_refs``
+and ``build_nb_page``.
+
+pyterm::
+    >>> from cdt.tools import extract
+    >>> print(extract.refs_nb_page(
+    ...     "3p101, exa 9p10...4 (one comment) [link 1 | link 2]"
+    ... ))
+    [
+        {
+            'exercise': [
+                [{'type': 'int', 'value': '3'},
+                 {'type': 'int', 'value': '101'}],
+                None
+            ]
+        },
+        {
+            'example': [
+                [{'type': 'int', 'value': '9'},
+                 {'type': 'int', 'value': '10'}],
+                [{'type': 'int', 'value': '4'},
+                 {'type': 'none'}]
+            ],
+            'comments': 'one comment',
+            'links'   : ['link 1', 'link 2']
+        }
+    ]
+
+
+info::
+    For all exercices, we give a start and a end. For an exercice alone, the
+    end is ``None``. This will ease to analyze the ¨infos later.
+    """
+    return build_some_refs(text, build_nb_page)
+
+def build_nb_page(oneref):
+    """
+property::
+    see = normalize_nb_page
+
+    arg = str: oneref ;
+          a text corresponding to a single "number-and-page" like reference
+
+    return = str, list(dict(str: str), dict(str: str)) ;
+             the string indicates the kind of exercice, and each dictionaries
+             in the list indicates at least a type associated to the key
+             ``'type'`` which can be ``'none'`` to indicate a missing number.
+             If it is not the case, the value is indicated with the key
+             ``'value'``.
+    """
+    match = FIRST_LETTERS.search(oneref)
+
+    if match:
+        kind  = match.group("kind")
+        value = match.group("value")
+
+        if kind in NB_AND_PAGE_REFS:
+            kind = NB_AND_PAGE_REFS[kind]
+
+        else:
+            kind  = NB_AND_PAGE_REFS[""]
+            value = oneref
+
+    else:
+        kind  = NB_AND_PAGE_REFS[""]
+        value = oneref
+
+# Let's analysze the value(s).
+    values = value.split('...')
+
+    if len(values) > 2:
+        raise ValueError("too much ellipsis ``...`` used")
+
+    values = [normalize_nb_page(x) for x in values]
+
+# Verbosity will simplify the job later !
+    if len(values) == 1:
+        values.append(None)
+
+# All has been done.
+    return kind, values
+
+def normalize_nb_page(oneref):
     """
 property::
     see = tools.numbers.typenb
 
     arg = str: text ;
-          one single reference for exercice
+          one single reference for an exercice
 
-    return = [dict, dict] ;
+    return = [dict(str: str), dict(str: str)] ;
              each dictionary is built by the function ``tools.numbers.typenb``.
              The first one is for the number of the exercice, maybe an "empty"
-             one, and the scond one is for the page taht can also be an "empty"
+             one, and the scond one is for the page that can also be an "empty"
              reference
 
 
@@ -157,30 +390,30 @@ Here are some examples of use where the outputs have been hand formatted.
 
 pyterm::
     >>> from cdt.tools import extract
-    >>> print(extract.buildoneref("1p222"))
+    >>> print(extract.normalize_nb_page("1p222"))
     [
-        {'text': '1', 'type': 'integer'},
-        {'text': '222', 'type': 'integer'}
+        {'value': '1', 'type': 'int'},
+        {'value': '222', 'type': 'int'}
     ]
-    >>> print(extract.buildoneref("p222"))
+    >>> print(extract.normalize_nb_page("p222"))
     [
-        {'type': 'empty'},
-        {'text': '222', 'type': 'integer'}
+        {'type' : 'none'},
+        {'value': '222', 'type': 'int'}
     ]
-    >>> print(extract.buildoneref("1"))
+    >>> print(extract.normalize_nb_page("1"))
     [
-        {'text': '1', 'type': 'integer'},
-        {'type': 'empty'}
+        {'value': '1', 'type': 'int'},
+        {'type' : 'none'}
     ]
     """
-    value = value.strip()
+    oneref = oneref.strip()
 
-    if not value:
+    if not oneref:
         raise ValueError("missing number and/or page reference")
 
     pieces = [
         typenb(x)
-        for x in value.split("p")
+        for x in oneref.split("p")
     ]
 
     if len(pieces) > 2:
@@ -193,177 +426,71 @@ pyterm::
     return pieces
 
 
-def refs_nb_page(text):
-    """
-    see = splitwithextra, buildoneref
-
-    arg = str: text ;
-          several references for numbered exercices with eventually additional
-          comments
-
-    return = [dict] ;
-             a list of dictionary having always the key ``REFS_TAG`` with
-             corresponding value a tuple indicating the kind of exercice and a
-             list giving the exercices found (either one single value or two
-             values for a range of exercices).
-             If a comment has been indicated, the corresponding content will be
-             the value of the additional key ``COMMENT_TAG``.
-
-
-The following example shows how the the values returned look like (the output
-has been hand formatted).
-
-pyterm::
-    >>> from cdt.tools import extract
-    >>> print(extract.ref_nb_page(
-    ...     "3p101, exa 9p10...4 (comment 2)"
-    ... ))
-    [
-        {
-            'refs': (
-                'exercise', [
-                    [{'text': '3', 'type': 'integer'},
-                     {'text': '101', 'type': 'integer'}]
-                ]
-            )
-        },
-        {
-            'comment': 'comment 2',
-            'refs'   : (
-                'example', [
-                    [{'text': '9', 'type': 'integer'},
-                     {'text': '10', 'type': 'integer'}],
-                    [{'text': '4', 'type': 'integer'},
-                     {'type': 'empty'}]
-                ]
-            )
-        }
-    ]
-    """
-    refs = []
-
-    for oneref, onecomment in splitwithextra(text):
-        oneref = oneref.strip()
-
-# What kind of exercices ?
-        match = FIRST_LETTERS.search(oneref)
-
-        if match:
-            if match.group("kind") == "p":
-                kind  = ""
-                value = oneref
-
-            else:
-                kind  = match.group(1)
-                value = match.group(2)
-
-        else:
-            kind  = ""
-            value = oneref
-
-        if kind not in NB_AND_PAGE_REFS:
-            if kind:
-                raise ValueError(
-                    "unknwon kind of exercice : << {0} >>".format(kind)
-                )
-
-            else:
-                raise ValueError("no default kind for exercices")
-
-        kind = NB_AND_PAGE_REFS[kind]
-
-# Let's analysze the value(s).
-        values = value.split('...')
-
-        if len(values) > 2:
-            raise ValueError("too much ellipsis ``...`` used")
-
-        values = [buildoneref(x) for x in values]
-
-        wholerefs = {REFS_TAG: (kind, values)}
-
-# A comment ?
-        if onecomment:
-            wholerefs[COMMENT_TAG] = onecomment
-
-        refs.append(wholerefs)
-
-    return refs
-
-
 def refs_perso(text):
     """
 prototype::
-    see = splitwithextra
+    see = splitwithextras
 
     arg = str: text ;
           several personal references that are documents eventually with links
-          to them
+          associated
+
+
+    return = list(dict) ;
+             a list of dictionary with infos ready to be truly analyzed (see
+             the examples above)
+
 
     return = [dict] ;
              a list of dictionary having always the key ``TITLE_TAG`` with
              corresponding value a string indicating the title of a document.
-             If some links separated by semi-colons have been indicated,
-             they are translated to a list of strings which will be the value
-             of the additional key ``LINKS_TAG``.
-             And if a comment has been indicated, the corresponding content
-             will be the value of the additional key ``COMMENT_TAG``.
+             The optional keys key ``LINKS_TAG``, key ``COMMENTS_TAG`` and
+             ``CONTEXTS_TAG`` can appear if ``[...]``, ``(...)`` and ``{...}``
+             respectively have been used.
 
 
 The following example shows how the the values returned look like (the output
-has been hand formatted).
+has been hand formatted). All the job is done by the functions ``build_some_refs``
+and ``build_perso``.
 
 pyterm::
     >>> from cdt.tools import extract
-    >>> print(extract.ref_perso(
-    ...     "1ST title, 2nd title [linktoit] (just a comment)"
+    >>> print(extract.refs_perso(
+    ...     "1st title, 2nd title [link 1 | link 2] (comment) {context}"
     ... ))
     [
-        {'title': '1ST title'},
+        {'title': '1st title'},
         {
-            'title'  : '2nd title',
-            'links'  : ['linktoit'],
-            'comment': 'just a comment'
+            'title'   : '2nd title',
+            'comments': 'comment',
+            'contexts': ['context'],
+            'links'   : ['link 1', 'link 2']
         }
     ]
     """
-    refs = []
+    return build_some_refs(text, build_perso)
 
-    for oneref, onecomment in splitwithextra(text):
-        for title, links in splitwithextra(
-            text = oneref,
-            seps = ['[', ']']
-        ):
-            wholerefs = {TITLE_TAG: title}
-
-# Some links ?
-            if links is not None:
-                links = links.strip()
-
-                if not links:
-                    raise ValueError("no links inside [...]")
-
-                links = splitit(
-                    text = links,
-                    sep  = ";"
-                )
-
-                wholerefs[LINKS_TAG] = links
-
-# A comment ?
-            if onecomment:
-                wholerefs[COMMENT_TAG] = onecomment
-
-            refs.append(wholerefs)
-
-    return refs
-
-
-def refs_toc(tex):
+def build_perso(oneref):
     """
-pour reference dans les DS !!!
+prototype::
+    arg = str: oneref ;
+          a text corresponding to a single personal reference
 
-soit une ref toc soit un texte pour cas particulier
+    return = str, str ;
+             simply the string ``TITLE_TAG`` with the variable ``oneref``
+    """
+    return TITLE_TAG, oneref
+
+
+def refs_toc(text):
+    """
+    ???
+    """
+    raise NotImplementedError("Not available for the moment")
+
+def build_toc(text):
+    """
+    ???
     """
     raise NotImplementedError("Not available for the moment")
 
@@ -371,12 +498,6 @@ soit une ref toc soit un texte pour cas particulier
 # ------------- #
 # -- GENERAL -- #
 # ------------- #
-
-def url(text):
-    """
-    ???
-    """
-    raise NotImplementedError("Not available for the moment")
 
 def lang(text):
     """
@@ -405,19 +526,25 @@ def datename(yearnb, monthnb, daynb, lang):
         lang      = lang
     )
 
-def date(text):
+def dates(text):
+    """
+    ???
+
+alais disponible
+    thisday juste aujourd'hui
+    fromnow  depuis aujourd'hui
+
+pratique pour ne pas retaper la date en cours !!!!
+    """
+    raise NotImplementedError("Not available for the moment")
+
+def times(text):
     """
     ???
     """
     raise NotImplementedError("Not available for the moment")
 
-def time(text):
-    """
-    ???
-    """
-    raise NotImplementedError("Not available for the moment")
-
-def year(text):
+def years(text):
     """
     ???
     """

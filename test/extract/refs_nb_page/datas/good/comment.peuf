@@ -1,0 +1,33 @@
+single_one::
+    input::
+        pw p101 (one comment)
+
+    output::
+        pw       = none: , int: 101
+        comments = one comment
+
+
+two::
+    input::
+        3p101 (comment 1), 9p10 (comment 2, ok ?)
+
+    output::
+        exe      = int: 3 , int: 101
+        comments = comment 1
+
+        exe      = int: 9 , int: 10
+        comments = comment 2, ok ?
+
+
+an_isolated_one::
+    input::
+        3p101 , 9p10 (comment alone) , exa 9p10...4p7
+
+    output::
+        exe = int: 3 , int: 101
+
+        exe      = int: 9 , int: 10
+        comments = comment alone
+
+        exa = int: 9 , int: 10
+            | int: 4 , int: 7
