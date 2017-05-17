@@ -39,7 +39,6 @@ general::
     country
     city
     zipcode
-    area
     institute
 
 

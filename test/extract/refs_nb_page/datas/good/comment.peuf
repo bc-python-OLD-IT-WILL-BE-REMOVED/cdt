@@ -3,8 +3,8 @@ single_one::
         pw p101 (one comment)
 
     output::
-        pw       = none: , int: 101
-        comments = one comment
+        pw      = none: , int: 101
+        comment = one comment
 
 
 two::
@@ -12,11 +12,11 @@ two::
         3p101 (comment 1), 9p10 (comment 2, ok ?)
 
     output::
-        exe      = int: 3 , int: 101
-        comments = comment 1
+        exe     = int: 3 , int: 101
+        comment = comment 1
 
-        exe      = int: 9 , int: 10
-        comments = comment 2, ok ?
+        exe     = int: 9 , int: 10
+        comment = comment 2, ok ?
 
 
 an_isolated_one::
@@ -26,8 +26,8 @@ an_isolated_one::
     output::
         exe = int: 3 , int: 101
 
-        exe      = int: 9 , int: 10
-        comments = comment alone
+        exe     = int: 9 , int: 10
+        comment = comment alone
 
         exa = int: 9 , int: 10
             | int: 4 , int: 7

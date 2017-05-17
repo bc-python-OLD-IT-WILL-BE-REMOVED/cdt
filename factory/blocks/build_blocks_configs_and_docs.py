@@ -24,6 +24,9 @@ for parent in THIS_DIR.parents:
         break
 
 
+DOC_DIR = parent / 'doc'
+
+
 PY_CONFIG_DIR = parent / 'cdt/config'
 PY_TOOLS_DIR  = parent / 'cdt/tools'
 
@@ -191,6 +194,8 @@ common_nb        = 0
 common_defs_txt  = []
 keyval_types_txt = []
 
+all_blocks_for_doc = defaultdict(list)
+
 for ppath in PEUF_DIR.walk("file::**.txt"):
     name = ppath.stem
 
@@ -206,7 +211,9 @@ for ppath in PEUF_DIR.walk("file::**.txt"):
 
     for kind, subinfos in infos['main'].items():
         if kind == "verbatim":
-            ...
+            containers, names = extractnames(subinfos["names"])
+
+            all_blocks_for_doc[name.lower()] += names
 
         elif kind in ["keyval", "multikeyval"]:
             kind = "{0}:: {1}".format(kind, subinfos["seps"])
@@ -250,6 +257,8 @@ for ppath in PEUF_DIR.walk("file::**.txt"):
         ]
 
         for blocknames in sorted(infos.keys()):
+            all_blocks_for_doc[name.lower()].append(blocknames)
+
             keyvaltouse = infos[blocknames]
             whatwewant  = typeswanted(keyvaltouse)
 
@@ -307,6 +316,8 @@ for ppath in PEUF_DIR.walk("file::**.txt"):
                     )
                 ]
 
+#TODO: PB SETTINGS
+    break
 
 for lines in [
     common_defs_txt,
@@ -330,3 +341,100 @@ with pyfile_config.open(
     encoding = "utf-8"
 ) as pyfile:
     pyfile.write("\n".join(pytxt_config))
+
+
+# --------------------- #
+# -- UPDATE THE DOCS -- #
+# --------------------- #
+
+print('        + Updating (?) the doc')
+
+STARTING_DOC = """
+this::
+    date = XXXX-XX-XX
+
+
+====================================
+???
+====================================
+
+???
+
+""".lstrip()
+
+
+for context, names in all_blocks_for_doc.items():
+# Looking for the associated file in the doc.
+    ppaths_found = []
+
+    for ppath in DOC_DIR.walk("file::**/{0}.txt".format(context)):
+        ppaths_found.append(ppath)
+
+    if len(ppaths_found) == 0:
+        raise OSError(
+            "missing file in the doc for the context ''{0}''".format(context)
+        )
+
+    elif len(ppaths_found) > 1:
+        message = [
+            "several files in the doc for the context ''{0}''".format(context)
+        ]
+
+        for p in ppaths_found:
+            message.append("    + {0}".format(p))
+
+        raise OSError("\n".join(message))
+
+    toc_file   = ppaths_found[0]
+    content_dir = toc_file.parent / toc_file.stem
+
+    with toc_file.open(
+        mode     = "r",
+        encoding = "utf-8"
+    ) as docfile:
+        content = docfile.read()
+
+    blocks_documented = []
+
+    for line in content.split('\n'):
+        if line.startswith("    ¨content/"):
+            filename = line.split(".txt")[0]
+
+            blocks_documented.append(filename.split("/")[-1])
+
+    errors_found = []
+
+    names.sort()
+
+    padding = max(len(n) for n in names) + 10
+
+    for onename in names:
+        one_doc_file = content_dir / (onename + ".txt")
+
+        if not one_doc_file.is_file():
+            with one_doc_file.open(
+                mode     = "w",
+                encoding = "utf-8"
+            ) as docfile:
+                docfile.write(STARTING_DOC)
+
+        if onename not in blocks_documented:
+            onename = onename + ".txt"
+
+            errors_found.append(
+                "    ¨content/{0}#TODO".format(
+                    onename.ljust(padding)
+                )
+            )
+
+    if errors_found:
+        content = content.replace(
+            "content::",
+            "content::\n{0}".format("\n".join(errors_found))
+        )
+
+        with toc_file.open(
+            mode     = "w",
+            encoding = "utf-8"
+        ) as docfile:
+            docfile.write(content)

@@ -80,7 +80,7 @@ def test_extract_refs_nbpage_bad(or_datas):
     datas = THE_DATAS_FOR_TESTING["bad"]
 
     for _, infos in datas.items():
-        for testname, keysvalues in infos.mydict("tree std nosep nonb").items():
+        for testname, keysvalues in infos.mydict("tree std mini").items():
             with raises(ValueError):
                 REFSNBPAGE(keysvalues["text"])
 
@@ -113,12 +113,9 @@ def stdvalue(key, value):
 
             nbpages.append(oneref)
 
-        if len(nbpages) == 1:
-            nbpages.append(None)
-
         return nbpages
 
-    elif key == extract.COMMENTS_TAG:
+    elif key == extract.COMMENT_TAG:
         return value
 
     else:
@@ -129,6 +126,7 @@ def test_extract_refs_nbpage_good(or_datas):
     datas = THE_DATAS_FOR_TESTING["good"]
 
     for _, datatest in datas.items():
+        print("datatest", type(datatest), datatest)
         for testname, infos in datatest.mydict("nosep nonb").items():
             kind = testname[1].split("/")[-1]
 

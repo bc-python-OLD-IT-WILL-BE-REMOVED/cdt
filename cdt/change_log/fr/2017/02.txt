@@ -1,0 +1,9 @@
+==========
+2017-02-19
+==========
+
+**Améliorations minimes dans le module ``tools.extract``.**
+
+    1) On n'utilise plus ``None`` pour indiquer un exercice seul par opposition à une plage d'exercices. En fait, cette ¨info est cachée dans la taille de la liste des ¨refs de l'exercice ! Par contre, on garde bien ``{'type': 'none'}`` pour indiquer que le numéro de page ou celui de l'exercice n'a pas été renseigné.
+
+    2) Au lieu de ``COMMENTS_TAG = "comments"``, on utilise ``COMMENT_TAG = "comment"`` sans "s" pour indiquer que l'on ne considère qu'une seule chaîne de caractères lors de l'analyse. À comparer avec ``CONTEXTS_TAG = "contexts"`` et ``LINKS_TAG = "links"`` pour lesquels on renvoie les données associées dans une liste de chaînes de caractères.

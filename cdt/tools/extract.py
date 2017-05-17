@@ -2,7 +2,7 @@
 
 """
 prototype::
-    date = 2017-01-01
+    date = 2017-02-19
 
 
 This module contains all the functions needed to extract informations.
@@ -30,7 +30,7 @@ SEPARATOR = "|"
 
 NB_PAGE_TAG, TITLE_TAG = "nbpage", "title"
 
-COMMENTS_TAG, CONTEXTS_TAG, LINKS_TAG = "comments", "contexts", "links"
+COMMENT_TAG, CONTEXTS_TAG, LINKS_TAG = "comment", "contexts", "links"
 
 
 # ----------- #
@@ -110,11 +110,11 @@ pyterm::
 
 info::
     The strings ``'comments'``, ``'contexts'`` and ``'links'`` are stored in
-    the constants ``COMMENTS_TAG``, ``CONTEXTS_TAG`` and ``LINKS_TAG``.
+    the constants ``COMMENT_TAG``, ``CONTEXTS_TAG`` and ``LINKS_TAG``.
     """
 
     SEPS = {
-        COMMENTS_TAG: ["(", ")"],
+        COMMENT_TAG: ["(", ")"],
         CONTEXTS_TAG: ["{", "}"],
         LINKS_TAG   : ["[", "]"]
     }
@@ -283,7 +283,7 @@ prototype::
              a list of dictionary having always a key indicating the kind of
              exercice with corresponding value a list giving the number and
              page for the exercice.
-             The optional keys key ``LINKS_TAG``, key ``COMMENTS_TAG`` and
+             The optional keys key ``LINKS_TAG``, key ``COMMENT_TAG`` and
              ``CONTEXTS_TAG`` can appear if ``[...]``, ``(...)`` and ``{...}``
              respectively have been used.
 
@@ -301,8 +301,7 @@ pyterm::
         {
             'exercise': [
                 [{'type': 'int', 'value': '3'},
-                 {'type': 'int', 'value': '101'}],
-                None
+                 {'type': 'int', 'value': '101'}]
             ]
         },
         {
@@ -316,11 +315,6 @@ pyterm::
             'links'   : ['link 1', 'link 2']
         }
     ]
-
-
-info::
-    For all exercices, we give a start and a end. For an exercice alone, the
-    end is ``None``. This will ease to analyze the ¨infos later.
     """
     return build_some_refs(text, build_nb_page)
 
@@ -363,10 +357,6 @@ property::
         raise ValueError("too much ellipsis ``...`` used")
 
     values = [normalize_nb_page(x) for x in values]
-
-# Verbosity will simplify the job later !
-    if len(values) == 1:
-        values.append(None)
 
 # All has been done.
     return kind, values
@@ -444,7 +434,7 @@ prototype::
     return = [dict] ;
              a list of dictionary having always the key ``TITLE_TAG`` with
              corresponding value a string indicating the title of a document.
-             The optional keys key ``LINKS_TAG``, key ``COMMENTS_TAG`` and
+             The optional keys key ``LINKS_TAG``, key ``COMMENT_TAG`` and
              ``CONTEXTS_TAG`` can appear if ``[...]``, ``(...)`` and ``{...}``
              respectively have been used.
 
@@ -488,11 +478,11 @@ def refs_toc(text):
     """
     raise NotImplementedError("Not available for the moment")
 
-def build_toc(text):
-    """
-    ???
-    """
-    raise NotImplementedError("Not available for the moment")
+
+
+
+
+
 
 
 # ------------- #

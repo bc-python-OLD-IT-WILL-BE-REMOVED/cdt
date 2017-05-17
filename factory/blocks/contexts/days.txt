@@ -5,28 +5,22 @@
 main::
     keyval::
         seps : =
-        names: absence
-               train
+        names: train
                cor
-               next
                info
-               setup
+
+    multikeyval::
+       seps : =
+       names: next
 
     verbatim::
-        names: comment
-               lesson
+        names: lesson
 
 
 info-train-cor-next::
     book lesson = :refs_nb_page:
     perso       = :refs_perso:
 
-
-absence::
-    date   = :dates:
-    period = :times:
-    reason
-
-setup::
-    ref    = :refs_toc:
-    period = thisday , fromnow
+// One more key (see above)
+next::
+    date = :dates:

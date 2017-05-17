@@ -3,8 +3,8 @@ all_alone::
         3p101 (comment), 9p10 [link]   , exa 9p10...4p7 {reference}
 
     output::
-        value    = 3p101
-        comments = comment
+        value   = 3p101
+        comment = comment
 
         value = 9p10
         links = link
@@ -22,7 +22,7 @@ all_together::
         value = 3p101
 
         value    = 9p10
-        comments = comment
+        comment  = comment
         contexts = reference
         links    = link
 
