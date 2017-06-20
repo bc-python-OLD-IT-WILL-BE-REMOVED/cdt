@@ -1,8 +1,24 @@
-doc ttech à mettre à jour partout !!!!
+doc ttech + test  à mettre à jour partout !!!!
 
 
 ==========
-2017-06-?????
+2017-06-20   date ok !!!!
+==========
+
+path::``extract.py``
+devient le sous-package ``tools.extract``
+    ----> maintenance plus simple !!!!
+
+    general
+    reference
+    split
+    time
+    toc
+
+
+
+==========
+2017-06-17   date ok !!!!
 ==========
 
 **Gestion des ¨refs de type "¨tdm" dans le module ``tools.extract`` :**
@@ -14,10 +30,3 @@ doc ttech à mettre à jour partout !!!!
         C
             I
                 1
-
-
-
-(empty)
-[empty]
-{empty}
-    ---> à utiliser conjaintement à ... pour stopper la propagation !!!!

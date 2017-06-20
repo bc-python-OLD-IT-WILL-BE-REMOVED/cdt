@@ -13,7 +13,7 @@ import re
 
 from cdt.config.references.exercices import NB_AND_PAGE_REFS
 
-NONE_NB, INT_NB, TOC_NB = "none", "int", "toc"
+EMPTY_NB, INT_NB, TOC_NB = "empty", "int", "toc"
 
 VAL_TAG  = "value"
 TYPE_TAG = "type"
@@ -28,7 +28,7 @@ prototype::
           ``oneref`` should indicate a numbered reference that can be empty.
 
     return = {str: str} ;
-             the function returns ``{TYPE_TAG: NONE_NB}`` if ``oneref`` is
+             the function returns ``{TYPE_TAG: EMPTY_NB}`` if ``oneref`` is
              empty, or either ``{TYPE_TAG: TOC_NB, VAL_TAG : text}``, or
              ``{TYPE_TAG: INT_NB, VAL_TAG : text}`` where the string
              ``text`` is striped.
@@ -36,7 +36,7 @@ prototype::
     oneref = oneref.strip()
 
     if not oneref:
-        return {TYPE_TAG: NONE_NB}
+        return {TYPE_TAG: EMPTY_NB}
 
     kindfound = ""
 
