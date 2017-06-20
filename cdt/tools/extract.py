@@ -2,7 +2,7 @@
 
 """
 prototype::
-    date = 2017-02-19
+    date = 2017-06-12 ????????????????
 
 
 This module contains all the functions needed to extract informations.
@@ -20,6 +20,7 @@ from mistool.date_use import translate
 from mistool.string_use import between
 
 from cdt.tools.numbers import *
+from cdt.tools.indent import manage as manage_indent
 
 
 # --------------- #
@@ -30,16 +31,16 @@ SEPARATOR = "|"
 
 NB_PAGE_TAG, TITLE_TAG = "nbpage", "title"
 
-COMMENT_TAG, CONTEXTS_TAG, LINKS_TAG = "comment", "contexts", "links"
+COMMENTS_TAG, CONTEXTS_TAG, LINKS_TAG = "comments", "contexts", "links"
 
 
-# ----------- #
-# -- TOOLS -- #
-# ----------- #
+# ------------------- #
+# -- GENERAL TOOLS -- #
+# ------------------- #
 
 def splitit(text, sep = ","):
     """
-property::
+prototype::
     arg = str: text ;
           a string to be splitted regarding the string ``sep``
     arg = str: sep = "," ;
@@ -72,7 +73,7 @@ warning::
 
 class _splitwithextras():
     """
-property::
+prototype::
     see = splitwithextras, self.__call__
 
 
@@ -110,11 +111,11 @@ pyterm::
 
 info::
     The strings ``'comments'``, ``'contexts'`` and ``'links'`` are stored in
-    the constants ``COMMENT_TAG``, ``CONTEXTS_TAG`` and ``LINKS_TAG``.
+    the constants ``COMMENTS_TAG``, ``CONTEXTS_TAG`` and ``LINKS_TAG``.
     """
 
     SEPS = {
-        COMMENT_TAG: ["(", ")"],
+        COMMENTS_TAG: ["(", ")"],
         CONTEXTS_TAG: ["{", "}"],
         LINKS_TAG   : ["[", "]"]
     }
@@ -129,7 +130,7 @@ info::
 
     def _add_info(self, text):
         """
-property::
+prototype::
     arg = str: text ;
           a text using eventuallt comas to seprate pieces
 
@@ -156,7 +157,7 @@ property::
 
     def __call__(self, text):
         """
-property::
+prototype::
     arg = str: text ;
           one text containing pieces of text with optional comments ``(...)``,
           references ``{...}`` and links ``[...]``.
@@ -224,6 +225,85 @@ property::
 splitwithextras = _splitwithextras()
 
 
+# -------------------------- #
+# -- JUST FOR EXTRA INFOS -- #
+# -------------------------- #
+
+def build_comments(text):
+    """
+prototype::
+    ????
+    """
+    return text
+
+def _splitoneextra(text, sep):
+    """
+prototype::
+    ????
+    """
+    i = text.find(sep)
+
+    part_1, part_2 = text[:i], text[i + len(sep):]
+
+    return part_1.strip(), part_2.strip()
+
+def build_contexts(text):
+    """
+prototype::
+    ????
+    """
+    if "::" in text:
+        kind, value = _splitoneextra(
+            text = text,
+            sep  = "::"
+        )
+
+        if kind == "toc":
+            which = None
+
+        elif kind[:4] == "toc-":
+            kind, which = "toc", kind[4:]
+
+        else:
+            raise ValueError(
+                "unknown kind ``{0}`` for a context".format(kind)
+            )
+
+        if kind == "toc":
+            value = refs_toc(value)
+
+    else:
+        kind, which, value = None, None, text
+
+    return {
+        "type" : kind,
+        "which": which,
+        "value": value
+    }
+
+def build_links(text):
+    """
+prototype::
+    ????
+    """
+    if "@" not in text:
+        raise ValueError("missing ``@`` in a link")
+
+    title, url = _splitoneextra(
+        text = text,
+        sep  = "@"
+    )
+
+    return {
+        "title": title,
+        "url"  : url
+    }
+
+_BUILD_EXTRAS = {
+    name: globals()['build_{0}'.format(name)]
+    for name in [COMMENTS_TAG, CONTEXTS_TAG, LINKS_TAG]
+}
+
 # ---------------- #
 # -- REFERENCES -- #
 # ---------------- #
@@ -247,8 +327,8 @@ prototype::
 
 
 info::
-    For examples of what can be done with ``build_some_refs``, take a look at the
-    documentations of the functions ``refs_nb_page`` and ``refs_perso``.
+    For examples of what can be done with ``build_some_refs``, take a look at
+    the documentations of the functions ``refs_nb_page`` and ``refs_perso``.
     """
     infos = splitwithextras(text)
 
@@ -260,13 +340,36 @@ info::
         kind, value    = refbuilder(value)
         infos[i][kind] = value
 
-# Build the intermediate links and contexts.
-        for tag in [CONTEXTS_TAG, LINKS_TAG]:
+# ???????????????????????? Build the intermediate links and contexts.
+        for tag in [COMMENTS_TAG, CONTEXTS_TAG, LINKS_TAG]:
             if tag in oneinfo:
-                infos[i][tag] = splitit(
-                    text = oneinfo[tag],
-                    sep  = SEPARATOR
-                )
+                extras = oneinfo[tag]
+
+# Do we have to add extra infos automatically ?
+                j = i
+
+                if extras[:3] == "...":
+                    extras = extras[3:]
+
+                    for k in range(i-1, -1, -1):
+                        if tag in infos[k]:
+                            break
+
+                        else:
+                            j = k
+
+# Update the extras in infos.
+                build_extra = _BUILD_EXTRAS[tag]
+
+                extras = [
+                    build_extra(x) for x in splitit(
+                        text = extras,
+                        sep  = SEPARATOR
+                    )
+                ]
+
+                for k in range(j, i+1):
+                    infos[k][tag] = extras
 
     return infos
 
@@ -283,7 +386,7 @@ prototype::
              a list of dictionary having always a key indicating the kind of
              exercice with corresponding value a list giving the number and
              page for the exercice.
-             The optional keys key ``LINKS_TAG``, key ``COMMENT_TAG`` and
+             The optional keys key ``LINKS_TAG``, key ``COMMENTS_TAG`` and
              ``CONTEXTS_TAG`` can appear if ``[...]``, ``(...)`` and ``{...}``
              respectively have been used.
 
@@ -311,7 +414,7 @@ pyterm::
                 [{'type': 'int', 'value': '4'},
                  {'type': 'none'}]
             ],
-            'comments': 'one comment',
+            'comments': ['one comment'],
             'links'   : ['link 1', 'link 2']
         }
     ]
@@ -320,7 +423,7 @@ pyterm::
 
 def build_nb_page(oneref):
     """
-property::
+prototype::
     see = normalize_nb_page
 
     arg = str: oneref ;
@@ -363,7 +466,7 @@ property::
 
 def normalize_nb_page(oneref):
     """
-property::
+prototype::
     see = tools.numbers.typenb
 
     arg = str: text ;
@@ -434,7 +537,7 @@ prototype::
     return = [dict] ;
              a list of dictionary having always the key ``TITLE_TAG`` with
              corresponding value a string indicating the title of a document.
-             The optional keys key ``LINKS_TAG``, key ``COMMENT_TAG`` and
+             The optional keys key ``LINKS_TAG``, key ``COMMENTS_TAG`` and
              ``CONTEXTS_TAG`` can appear if ``[...]``, ``(...)`` and ``{...}``
              respectively have been used.
 
@@ -452,7 +555,7 @@ pyterm::
         {'title': '1st title'},
         {
             'title'   : '2nd title',
-            'comments': 'comment',
+            'comments': ['comment'],
             'contexts': ['context'],
             'links'   : ['link 1', 'link 2']
         }
@@ -472,17 +575,211 @@ prototype::
     return TITLE_TAG, oneref
 
 
+
+_TOC_RANGE_START = {
+    'level': -1,
+    'value': "range-start"
+}
+
+_TOC_RANGE_END = {
+    'level': -1,
+    'value': "end"
+}
+
+_TOC_RANGE_TO = {
+    'level': -1,
+    'value': "to"
+}
+
 def refs_toc(text):
     """
-    ???
+prototype::
+    see = refs_perso
+
+    arg = str: text ;
+          several personal references that are documents eventually with links
+          associated
+
+
+    return = list(dict) ;
+             a list of dictionary with infos ready to be truly analyzed (see
+             the examples above)
+
+
+        boulot fait par splitit(text, sep = "-") car C--I est interdit !!!
+
+
+???????????????????????????????????????????????????????????????
+???????????????????????????????????????????????????????????????
+???????????????????????????????????????????????????????????????
+???????????????????????????????????????????????????????????????
+???????????????????????????????????????????????????????????????
+???????????????????????????????????????????????????????????????
+
+
+json verbeux mais obligé pour extras fins !!!!
+
+    C-I-1
+    alias
+    C
+        I
+            1
+
+    [{'level': 0, 'value': 'C'},
+     {'level': 1, 'value': 'I'},
+     {'level': 2, 'value': '1'}]
+
+
+    C-I...C-III
+    alias
+    C
+        I...III
+
+    [{'level': 0, 'value': 'C'},
+     {'level': -1, 'value': "range-start"},
+     {'level': 1, 'value': 'I'},
+     {'level': -1, 'value': "to"},
+     {'level': 1, 'value': 'III'},
+     {'level': -1, 'value': "range-end"}]
+
+
+    C-I-1-a...C-III-2
+    alias
+    C
+        I-1-a...III-2
+
+    [{'level': 0, 'section': 'C'},
+     {'level': -1, 'value': "range-start"},
+     {'level': 1, 'value': 'I'},
+     {'level': 2, 'value': '1'},
+     {'level': 3, 'value': 'a'},
+     {'level': -1, 'value': "to"},
+     {'level': 1, 'value': 'III'},
+     {'level': 2, 'value': '2'},
+     {'level': -1, 'value': "range-end"}]
+
+
+
+)
+
+C-I-1 (comment) [title @ link] {context}
+
+équivaut à
+
+C
+    I
+        1   (comment) [title @ link] {context}
+
+mais pas à
+
+C           (comment) [title @ link] {context}
+    I       (comment) [title @ link] {context}
+        1   (comment) [title @ link] {context}
+
+que l'on peut condenser en (usage ciblé de ...  possible !!!!)
+
+C-I-1 (... comment) [... title @ link] {... context}
+
+
+donc extras appliqué à section de plus bas niveau uniquemnt (oimplémentation  plus simple bien que conte-intuitif)
+
+
+[{'level': 0, 'value': ['C']},
+ {'level': 1, 'value': ['I']},
+ {'comments': ['comment'],
+  'contexts': [{'type': None, 'value': 'context', 'which': None}],
+  'level': 2,
+  'links': [{'title': 'title', 'url': 'link'}],
+  'value': ['1']}]
+
+
+
+lien pour tout
+
+C-I...C-III [title @ link]  , C-V
+
+
+
+Par contre, dans ``B-I ... B-IV-2 (commentaire)``, la commentaire s'applique de la ¨1ERE section indiquée à la dernière de la plage. C'est comme si nous avions tapé :
+
+cdt::
+    lesson::
+        B
+            I (commentaire)
+            II (commentaire)
+            III (commentaire)
+            IV (commentaire)
+                1 (commentaire)
+                2 (commentaire)
+
+
+    ==
+    08
+    ==
+    lesson::
+        A-I
+
+    ==
+    09
+    ==
+    lesson::
+        *-I , *-II-1
+
+
+
+
+
+
+
+
     """
-    raise NotImplementedError("Not available for the moment")
+    toc = []
 
+    for line in text.split("\n"):
+        level, line = manage_indent(line)
 
+# An empty line.
+        if level < 0:
+            continue
 
+# Something to analyze.
+        for tocref in refs_perso(line):
+            print(">>> tocref:", tocref)
+            secrefs = tocref['title'].split('...')
 
+            if len(secrefs) > 2:
+                raise ValueError("too much ellipsis ``...`` used")
 
+            if len(secrefs) == 2:
+                toc.append(_TOC_RANGE_START)
 
+            for i, onesecref in enumerate(secrefs):
+                if i == 1:
+                    toc.append(_TOC_RANGE_TO)
+
+                for sublevel, singlesec in enumerate(
+                    splitit(
+                        text = onesecref,
+                        sep  = "-"
+                    )
+                ):
+                    thissec = {
+                        k: v
+                        for k, v in tocref.items()
+                        if k != "title"
+                    }
+
+                    thissec.update({
+                        'level'  : level + sublevel,
+                        'section': singlesec
+                    })
+
+                    toc.append(thissec)
+
+            if len(secrefs) == 2:
+                toc.append(_TOC_RANGE_END)
+
+    return toc
 
 
 # ------------- #

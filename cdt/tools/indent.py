@@ -13,7 +13,7 @@ of texts.
 
 def manage(line):
     """
-property::
+prototype::
     arg = str: line
 
     return = (int, str) ;

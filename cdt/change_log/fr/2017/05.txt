@@ -1,30 +1,11 @@
 ==========
-2017-05-?????
+2017-05-30
 ==========
 
-ref
-    all : faire tout (utile pour perso par exemple)
+**Gestion avancée des commentaires, des liens et des contextes dans le module ``tools.extract``.**
 
+    1) Retour à ``COMMENTS_TAG = "comments"`` avec un "s" et une liste de chaînes de caractères pour stocker les données tout comme pour ``CONTEXTS_TAG = "contexts"`` et ``LINKS_TAG = "links"``.
 
-    perso = 1, 3 [Titre 1 @ lien_1] ,
-            I, II [Titre 2 @ lien_2]
+    1) Gestion des liens et des contextes dans la fonction ``build_some_refs`` via les fonctions ``build_comments``, ``build_links`` et ``build_contexts``.
 
-gestion des questions
-    1p4 q1to3
-        pour questions 1 à 3 de l'exercice 1 page 4
-
-    1p4 q1:3:5  (cf question I-1:II-3-a)
-        pour questions 1, 3 et 5 de l'exercice 1 page 4
-
-
-
-next::
-    book = 1p1
-
-// Pour le 20 du mois en cours (cf le nom du fichier)
-    date = 20
-    book = 2p2
-
-// Pour une date très précise
-    date = 2017-04-17
-    book = 3p3
+    1) Gestion de ``...`` pour l'ajout automatique de commentaires, de liens ou de contextes.

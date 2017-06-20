@@ -1,0 +1,23 @@
+doc ttech à mettre à jour partout !!!!
+
+
+==========
+2017-06-?????
+==========
+
+**Gestion des ¨refs de type "¨tdm" dans le module ``tools.extract`` :**
+
+???? gestion des refs toc (cf test ou {...})
+
+        C-I-1
+        POUR
+        C
+            I
+                1
+
+
+
+(empty)
+[empty]
+{empty}
+    ---> à utiliser conjaintement à ... pour stopper la propagation !!!!

@@ -23,7 +23,7 @@ RE_TOC_NB = re.compile("^[a-zA-Z\d]*((-[a-zA-Z]+)|(-\d+))*$")
 
 def typenb(oneref):
     """
-property::
+prototype::
     arg = str: oneref ;
           ``oneref`` should indicate a numbered reference that can be empty.
 
