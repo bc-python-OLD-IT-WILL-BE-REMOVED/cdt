@@ -19,10 +19,11 @@ SEPARATOR = "|"
 
 COMMENTS_TAG, CONTEXTS_TAG, LINKS_TAG = "comments", "contexts", "links"
 
+EMPTY_TAG    = "empty"
 EMPTY_EXTRAS = {
-    COMMENTS_TAG: [''],
-    CONTEXTS_TAG: [{'type': '', 'value': '', 'which': ''}],
-    LINKS_TAG   : [{'title': '', 'url': ''}]
+    COMMENTS_TAG: [EMPTY_TAG],
+    CONTEXTS_TAG: [{'value': EMPTY_TAG, 'type': '', 'which': ''}],
+    LINKS_TAG   : [{'title': '', 'url': EMPTY_TAG}]
 }
 
 # ----------- #
@@ -75,15 +76,9 @@ automatic propagation of extra ¨infos indicating using ``...``.
     def method_dec(cls, text):
         text = text.strip()
 
-        if text == "empty":
-            if method.__name__ in [
-                "build_one_comment",
-                "build_one_context"
-            ]:
-                text = ""
-
-            elif method.__name__ == "build_one_link":
-                text = "@"
+        if text == "empty" \
+        and method.__name__ == "build_one_link":
+            text = "@ empty"
 
         return method(cls, text)
 
@@ -317,6 +312,9 @@ prototype::
             text = text,
             sep  = "@"
         )
+
+        if not url:
+            raise ValueError("missing url in a link")
 
         return {
             "title": title,

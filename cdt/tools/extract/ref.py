@@ -78,10 +78,9 @@ info::
 
                                 break
 
-                    else:
-                        if oneextra[:3] == "...":
-                            autopopulate = True
-                            oneextra = oneextra[3:].strip()
+                    elif oneextra[:3] == "...":
+                        autopopulate = True
+                        oneextra = oneextra[3:].strip()
 
                     if autopopulate:
                         for k in range(i-1, -1, -1):
@@ -99,10 +98,10 @@ info::
 # Remove the empty extra infos.
     for i, oneinfo in enumerate(infos):
         somethingdone = False
-        for tag, emptyval in EMPTY_EXTRAS.items():
-            val = oneinfo.get(tag, None)
 
-            if val == emptyval:
+        for tag, emptyval in EMPTY_EXTRAS.items():
+            if tag in oneinfo \
+            and oneinfo[tag] == emptyval:
                 somethingdone = True
                 del oneinfo[tag]
 
