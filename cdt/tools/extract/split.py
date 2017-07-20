@@ -20,9 +20,9 @@ SEPARATOR = "|"
 COMMENTS_TAG, CONTEXTS_TAG, LINKS_TAG = "comments", "contexts", "links"
 
 
-# --------------- #
-# -- OUR TOOLS -- #
-# --------------- #
+# ----------- #
+# -- TOOLS -- #
+# ----------- #
 
 def splitit(text, sep = ","):
     """

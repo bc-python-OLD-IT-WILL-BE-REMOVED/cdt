@@ -7,7 +7,7 @@
 # -- SEVERAL IMPORTS -- #
 # --------------------- #
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 import json
 from pytest import fixture, raises
 
@@ -19,7 +19,7 @@ from orpyste.data import ReadBlock as READ
 # -- MODULE TESTED -- #
 # ------------------- #
 
-from cdt.tools import extract
+from cdt.tools.extract import ref
 from cdt.config.references.exercices import NB_AND_PAGE_REFS
 
 
@@ -30,14 +30,14 @@ from cdt.config.references.exercices import NB_AND_PAGE_REFS
 THIS_DIR  = PPath(__file__).parent
 DATAS_DIR = THIS_DIR / "datas"
 
-REFSNBPAGE = extract.refs_nb_page
+REFSNBPAGE = ref.refs_nb_page
 
 
 # ----------------------- #
 # -- DATAS FOR TESTING -- #
 # ----------------------- #
 
-THE_DATAS_FOR_TESTING = defaultdict(dict)
+THE_DATAS_FOR_TESTING = defaultdict(OrderedDict)
 
 MODE = {
     "bad" : "keyval:: =",
@@ -89,6 +89,10 @@ def test_extract_refs_nbpage_bad(or_datas):
 # -- GOOD NUMBERS -- #
 # ------------------ #
 
+# See /test/extract/model.py
+
+from cdt.config.references.exercices import NB_AND_PAGE_REFS
+
 def stdvalue(key, value):
     if key in NB_AND_PAGE_REFS:
         nbpages = []
@@ -102,7 +106,7 @@ def stdvalue(key, value):
                 nblike_type  = nblike_type.strip()
                 nblike_value = nblike_value.strip()
 
-                if nblike_type == "none":
+                if nblike_type == "empty":
                     oneref.append({'type': nblike_type})
 
                 else:
@@ -115,8 +119,49 @@ def stdvalue(key, value):
 
         return nbpages
 
-    elif key == extract.COMMENT_TAG:
-        return value
+    elif key == "title":
+        return [title.strip() for title in value.split('|')]
+
+    elif key == "section":
+        level, section = value.split('::')
+
+        return {
+            'section': section.strip(),
+            'level'  : int(level)
+        }
+
+    elif key == "links":
+        all_links = []
+
+        for piece in value.split('|'):
+            title, url = [
+                x.strip()
+                for x in piece.split('@')
+            ]
+
+            all_links.append({
+                "title": title,
+                "url"  : url
+            })
+
+        return all_links
+
+    elif key == "contexts":
+        all_contexts = []
+
+        for piece in value.split('|'):
+            thetype, which, value = [
+                x.strip()
+                for x in piece.split("::")
+            ]
+
+            all_contexts.append({
+                "type" : thetype.replace('none', ''),
+                "which": which.replace('none', ''),
+                "value": value
+            })
+
+        return all_contexts
 
     else:
         return [x.strip() for x in value.split("|")]
@@ -126,7 +171,6 @@ def test_extract_refs_nbpage_good(or_datas):
     datas = THE_DATAS_FOR_TESTING["good"]
 
     for _, datatest in datas.items():
-        print("datatest", type(datatest), datatest)
         for testname, infos in datatest.mydict("nosep nonb").items():
             kind = testname[1].split("/")[-1]
 

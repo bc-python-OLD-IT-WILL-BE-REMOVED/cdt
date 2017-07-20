@@ -24,7 +24,7 @@ LOG_FILE = THIS_DIR / "log.txt"
 # -- FUNCTIONS -- #
 # --------------- #
 
-def printtile(text):
+def printtitle(text):
     print(
         "",
         withframe(text),
@@ -37,14 +37,16 @@ def printtile(text):
 # -- LAUNCHING ALL THE TESTS -- #
 # ----------------------------- #
 
+print("\n"*100)
+
 with cd(THIS_DIR):
-    printtile("Launching all the tests...")
+    printtitle("Launching all the tests...")
 
     try:
         tests_passed = True
 
         runthis(
-            cmd        = "py.test -v --resultlog=x-pytest_log-x.txt",
+            cmd        = "py.test -v",
             showoutput = True
         )
 
@@ -56,7 +58,7 @@ with cd(THIS_DIR):
 # -- UPDATING THE LOG -- #
 # ---------------------- #
 
-printtile("Updating the log file...")
+printtitle("Updating the log file...")
 
 if tests_passed:
     message = ["OK"]

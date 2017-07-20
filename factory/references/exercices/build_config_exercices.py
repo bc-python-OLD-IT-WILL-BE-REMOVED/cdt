@@ -5,7 +5,6 @@
 # --------------------- #
 
 from collections import defaultdict
-from importlib.machinery import SourceFileLoader
 import types
 
 from mistool.os_use import PPath

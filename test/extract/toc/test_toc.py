@@ -5,6 +5,7 @@
 # --------------------- #
 
 from collections import defaultdict
+from importlib.machinery import SourceFileLoader
 import json
 from pytest import fixture, raises
 
@@ -17,7 +18,7 @@ from orpyste.data import ReadBlock as READ
 # -- MODULE TESTED -- #
 # ------------------- #
 
-from cdt.tools.extract import split
+from cdt.tools.extract import toc
 
 
 # ----------------------- #
@@ -27,7 +28,7 @@ from cdt.tools.extract import split
 THIS_DIR = PPath(__file__).parent
 DATAS_DIR = THIS_DIR / "datas"
 
-SPLITWITHEXTRAS = split.splitwithextras
+REFSTOC = toc.refs_toc
 
 
 # ----------------------- #
@@ -72,23 +73,61 @@ def or_datas(request):
 # -- BAD DATAS -- #
 # --------------- #
 
-def test_extract_splitrefs_bad(or_datas):
-    datas = THE_DATAS_FOR_TESTING["bad"]
-
-    for _, infos in datas.items():
-        for testname, keysvalues in infos.mydict("tree std nosep nonb").items():
-            with raises(ValueError):
-                SPLITWITHEXTRAS(keysvalues["text"])
+# def test_extract_toc_bad(or_datas):
+#     datas = THE_DATAS_FOR_TESTING["bad"]
+#
+#     for _, infos in datas.items():
+#         for testname, keysvalues in infos.mydict("tree std nosep nonb").items():
+#             with raises(ValueError):
+#                 REFSTOC(keysvalues["text"])
 
 
 # ---------------- #
 # -- GOOD DATAS -- #
 # ---------------- #
 
-# See /test/extract/refs_nb_page/test_refs_nb_page.py
+# See /test/extract/model.py
+
+from cdt.config.references.exercices import NB_AND_PAGE_REFS
 
 def stdvalue(key, value):
-    if key == "links":
+    if key in NB_AND_PAGE_REFS:
+        nbpages = []
+
+        for nbpage in value.split("|"):
+            oneref = []
+
+            for nblike in nbpage.split(","):
+                nblike_type, nblike_value = nblike.split(":")
+
+                nblike_type  = nblike_type.strip()
+                nblike_value = nblike_value.strip()
+
+                if nblike_type == "empty":
+                    oneref.append({'type': nblike_type})
+
+                else:
+                    oneref.append({
+                        'type' : nblike_type,
+                        'value': nblike_value
+                    })
+
+            nbpages.append(oneref)
+
+        return nbpages
+
+    elif key == "title":
+        return [title.strip() for title in value.split('|')]
+
+    elif key == "section":
+        level, section = value.split('::')
+
+        return {
+            'value': section.strip(),
+            'level': int(level)
+        }
+
+    elif key == "links":
         all_links = []
 
         for piece in value.split('|'):
@@ -125,7 +164,7 @@ def stdvalue(key, value):
         return [x.strip() for x in value.split("|")]
 
 
-def test_extract_splitrefs_good(or_datas):
+def test_extract_toc_good(or_datas):
     datas = THE_DATAS_FOR_TESTING["good"]
 
     for _, datatest in datas.items():
@@ -133,18 +172,24 @@ def test_extract_splitrefs_good(or_datas):
             kind = testname[1].split("/")[-1]
 
             if kind == "input":
-                text = " ".join(infos)
+                text = "\n".join(infos)
 
             else:
                 infoswanted = []
 
                 for key, value in infos.items(noid = True):
-                    if key == "value":
-                        infoswanted.append({key: value})
+                    if key == "section":
+                        infoswanted.append(stdvalue(key, value))
+
+                    elif key in ["start", "end"]:
+                        infoswanted[-1][key] = [
+                            stdvalue("section", onesection)
+                            for onesection in value.split("|")
+                        ]
 
                     else:
                         infoswanted[-1][key] = stdvalue(key, value)
 
-                infosfound = SPLITWITHEXTRAS(text)
+                infosfound = REFSTOC(text)
 
                 assert infoswanted == infosfound

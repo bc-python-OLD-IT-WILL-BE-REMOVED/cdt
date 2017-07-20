@@ -2,28 +2,34 @@
 
 """
 prototype::
-    date = 2017-06-20    ???
+    date = 2017-06-20
 
 
-????
+The purpose of this module is to work with references to the table of content
+of the lessons of the teacher.
 """
 
 
 from copy import deepcopy
-import datetime
-import re
 
-from mistool.date_use import translate
-from mistool.string_use import between
-
-from cdt.tools.number import *
+from cdt.tools.extract.ref import refs_perso
+from cdt.tools.extract.split import splitit
 from cdt.tools.indent import manage as manage_indent
 
+
+# --------------- #
+# -- CONSTANTS -- #
+# --------------- #
 
 _TOC_RANGE = {
     'level': -1,
     'value': "range"
 }
+
+
+# ----------- #
+# -- TOOLS -- #
+# ----------- #
 
 def _flatsecref(level, onesecref):
     """
@@ -31,18 +37,20 @@ prototype::
     see = refs_toc
 
     arg = int: level ;
-          ????
+          the level of indentation used in a block for the table of content
 
     arg = str: onesecref ;
-          ????
+          a single reference for a section in the table of content
 
     return = list({'level':int, 'section': str}) ;
-             ????
+             a list of "expanded" section with real level (for example
+             ``I-a-1`` will be expanded to the three sections ``I``, ``a``
+             and ``1`` with increasing level)
     """
     return [
         {
-            'level'  : level + sublevel,
-            'section': singlesec
+            'level': level + sublevel,
+            'value': singlesec
         }
         for sublevel, singlesec in enumerate(
             splitit(
@@ -55,123 +63,156 @@ prototype::
 def refs_toc(text):
     """
 prototype::
-    see = refs_perso
+    see = tools.extract.ref.refs_perso
 
     arg = str: text ;
-          several personal references that are documents eventually with links
-          associated
-
+          a text using tabulations or minus sign seprator to indicate
+          references to sections of a table of content.
+          Optional comments inside ``(...)``, links inside ``[...]`` and
+          contexts inside ``{...}`` can be used.
 
     return = list(dict) ;
-             a list of dictionary with infos ready to be truly analyzed (see
-             the examples above)
+             a list of dictionnary looking gibing at least the section and its
+             level in the table of content
 
 
-        boulot fait par splitit(text, sep = "-") car C--I est interdit !!!
+Here are som examples of outputs made by ``refs_toc`` (the outputs have been
+hand formatted). Here we don't have used comas to separate several references
+but you can do it.
+
+pyterm::
+    >>> from cdt.tools.extract import toc
+    >>> # --- TWO SAME OUTPUTS --- #
+    >>> print(toc.refs_toc("C-I-1"))
+    [
+        {'value': 'C', 'level': 0},
+        {'value': 'I', 'level': 1},
+        {'value': '1', 'level': 2}
+    ]
+    >>> print(toc.refs_toc('''
+    ... C
+    ...     I
+    ...         1
+    ... '''))
+    [
+        {'value': 'C', 'level': 0},
+        {'value': 'I', 'level': 1},
+        {'value': '1', 'level': 2}
+    ]
+    >>> # --- TWO SIMILAR OUTPUTS --- #
+    >>> print(toc.refs_toc("C-I...C-III"))
+    [
+        {
+            'value': 'range', 'level': -1',
+            'start': [
+                {'value': 'C', 'level': 0},
+                {'value': 'I', 'level': 1}
+            ],
+            'end': [
+                {'value': 'C', 'level': 0},
+                {'value': 'III', 'level': 1}
+            ]
+        }
+    ]
+    >>> print(toc.refs_toc('''
+    ... C
+    ...     I...III
+    ... '''))
+    [
+        {'value': 'C', 'level': 0},
+        {
+            'value': 'range', 'level': -1,
+            'start': [{'value': 'I', 'level': 1}],
+            'end': [{'value': 'III', 'level': 1}],
+        }
+    ]
+    >>> # --- TWO SAME OUTPUTS --- #
+    >>> print(toc.refs_toc("C-I-1 (comment) [title @ link] {context}"))
+    [
+        {'value': 'C', 'level': 0},
+        {'value': 'I', 'level': 1},
+        {
+            'section': '1', 'level': 2,
+            'comments': ['comment'],
+            'contexts': [{'type': '', 'which': '', 'value': 'context'}],
+            'links': [{'url': 'link', 'title': 'title'}]
+        }
+    ]
+    >>> print(toc.refs_toc('''
+    ... C
+    ...     I
+    ...         1   (comment) [title @ link] {context}
+    ... '''))
+    [
+        {'value': 'C', 'level': 0},
+        {'value': 'I', 'level': 1},
+        {
+            'section': '1', 'level': 2,
+            'comments': ['comment'],
+            'contexts': [{'type': '', 'which': '', 'value': 'context'}],
+            'links': [{'url': 'link', 'title': 'title'}]
+        }
+    ]
+    >>> # --- EXTRAS FOR ALL SECTIONS IN A RANGE --- #
+    >>> print(toc.refs_toc("C-I...C-III [title @ link]"))
+    [
+        {
+            'value': 'range', 'level': -1,
+            'start': [
+                {'value': 'C', 'level': 0},
+                {'value': 'I', 'level': 1}
+            ],
+            'end': [
+                {'value': 'C', 'level': 0},
+                {'value': 'III', 'level': 1}
+            ],
+            'links': [{'url': 'link', 'title': 'title'}]
+        }
+    ]
 
 
-???????????????????????????????????????????????????????????????
-???????????????????????????????????????????????????????????????
-???????????????????????????????????????????????????????????????
-???????????????????????????????????????????????????????????????
-???????????????????????????????????????????????????????????????
-???????????????????????????????????????????????????????????????
+warning::
+    To add extra informations to several sections, you have to do as in the 2nd
+    example below (the outputs have been hand formatted).
 
-
-json verbeux mais obligé pour extras fins !!!!
-
-    C-I-1
-    alias
-    C
-        I
-            1
-
-    [{'level': 0, 'value': 'C'},
-     {'level': 1, 'value': 'I'},
-     {'level': 2, 'value': '1'}]
-
-
-    C-I...C-III
-    alias
-    C
-        I...III
-
-    [{'level': 0, 'value': 'C'},
-     {'level': -1, 'value': "range-start"},
-     {'level': 1, 'value': 'I'},
-     {'level': -1, 'value': "to"},
-     {'level': 1, 'value': 'III'},
-     {'level': -1, 'value': "range-end"}]
-
-
-    C-I-1-a...C-III-2
-    alias
-    C
-        I-1-a...III-2
-
-    [{'level': 0, 'section': 'C'},
-     {'level': -1, 'value': "range-start"},
-     {'level': 1, 'value': 'I'},
-     {'level': 2, 'value': '1'},
-     {'level': 3, 'value': 'a'},
-     {'level': -1, 'value': "to"},
-     {'level': 1, 'value': 'III'},
-     {'level': 2, 'value': '2'},
-     {'level': -1, 'value': "range-end"}]
-
-
-
-)
-
-C-I-1 (comment) [title @ link] {context}
-
-équivaut à
-
-C
-    I
-        1   (comment) [title @ link] {context}
-
-mais pas à
-
-C           (comment) [title @ link] {context}
-    I       (comment) [title @ link] {context}
-        1   (comment) [title @ link] {context}
-
-que l'on peut condenser en (usage ciblé de ...  possible !!!!)
-
-C-I-1 (... comment) [... title @ link] {... context}
-
-
-donc extras appliqué à section de plus bas niveau uniquemnt (oimplémentation  plus simple bien que conte-intuitif)
-
-
-[{'level': 0, 'value': ['C']},
- {'level': 1, 'value': ['I']},
- {'comments': ['comment'],
-  'contexts': [{'type': None, 'value': 'context', 'which': None}],
-  'level': 2,
-  'links': [{'title': 'title', 'url': 'link'}],
-  'value': ['1']}]
-
-
-
-lien pour tout
-
-C-I...C-III [title @ link]  , C-V
-
-
-
-Par contre, dans ``B-I ... B-IV-2 (commentaire)``, la commentaire s'applique de la ¨1ERE section indiquée à la dernière de la plage. C'est comme si nous avions tapé :
-
-cdt::
-    lesson::
-        B
-            I (commentaire)
-            II (commentaire)
-            III (commentaire)
-            IV (commentaire)
-                1 (commentaire)
-                2 (commentaire)
+    pyterm::
+        >>> from cdt.tools.extract import toc
+        >>> print(toc.refs_toc("C-I-1   (comment) [title @ link] {context}"))
+        [
+            {'value': 'C', 'level': 0},
+            {'value': 'I', 'level': 1},
+            {
+                'section': '1', 'level': 2,
+                'comments': ['comment'],
+                'contexts': [{'type': '', 'value': 'context', 'which': ''}],
+                'links': [{'url': 'link', 'title': 'title'}]
+            }
+        ]
+        >>> print(toc.refs_toc('''
+        ... C           (comment) [title @ link] {context}
+        ...     I       (comment) [title @ link] {context}
+        ...         1   (comment) [title @ link] {context}
+        ... '''))
+        [
+            {
+                'section': 'C', 'level': 0,
+                'comments': ['comment'],
+                'contexts': [{'type': '', 'value': 'context', 'which': ''}],
+                'links': [{'url': 'link', 'title': 'title'}]
+            },
+            {
+                'section': 'I', 'level': 1,
+                'comments': ['comment'],
+                'contexts': [{'type': '', 'value': 'context', 'which': ''}],
+                'links': [{'url': 'link', 'title': 'title'}]
+            },
+            {
+                'section': '1', 'level': 2,
+                'comments': ['comment'],
+                'contexts': [{'type': '', 'value': 'context', 'which': ''}],
+                'links': [{'url': 'link', 'title': 'title'}]
+            }
+        ]
     """
     toc = []
 

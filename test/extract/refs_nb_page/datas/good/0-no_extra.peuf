@@ -1,0 +1,56 @@
+one_exe_nb_page::
+    input::
+        1p2
+
+    output::
+        exe = int: 1 , int: 2
+
+
+one_exe_nb::
+    input::
+        1
+
+    output::
+        exe = int: 1 , empty:
+
+
+one_exe_page::
+    input::
+        p2
+
+    output::
+        exe = empty: , int: 2
+
+
+one_exe_alpha::
+    input::
+        I p a
+
+    output::
+        exe = alpha: I , alpha: a
+
+one_exe_mix::
+    input::
+        I-1 p a
+
+    output::
+        exe = mix: I-1 , alpha: a
+
+
+two_exe::
+    input::
+        333p444, 505p6060
+
+    output::
+        exe = int: 333 , int: 444
+
+        exe = int: 505 , int: 6060
+
+
+range::
+    input::
+        exa 9p10 ... 11p12
+
+    output::
+        exa = int: 9 , int: 10
+            | int: 11 , int: 12

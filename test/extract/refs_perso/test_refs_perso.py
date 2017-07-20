@@ -1,10 +1,13 @@
+# ADAPTER POUR CAS DIVERS (perso, lesson, book, ...)
+
+
 #!/usr/bin/env python3
 
 # --------------------- #
 # -- SEVERAL IMPORTS -- #
 # --------------------- #
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 import json
 from pytest import fixture, raises
 
@@ -12,29 +15,28 @@ from mistool.os_use import PPath
 from orpyste.data import ReadBlock as READ
 
 
-
 # ------------------- #
 # -- MODULE TESTED -- #
 # ------------------- #
 
-from cdt.tools.extract import split
+from cdt.tools.extract import ref
 
 
 # ----------------------- #
 # -- GENERAL CONSTANTS -- #
 # ----------------------- #
 
-THIS_DIR = PPath(__file__).parent
+THIS_DIR  = PPath(__file__).parent
 DATAS_DIR = THIS_DIR / "datas"
 
-SPLITWITHEXTRAS = split.splitwithextras
+REFSPERSO = ref.refs_perso
 
 
 # ----------------------- #
 # -- DATAS FOR TESTING -- #
 # ----------------------- #
 
-THE_DATAS_FOR_TESTING = defaultdict(dict)
+THE_DATAS_FOR_TESTING = defaultdict(OrderedDict)
 
 MODE = {
     "bad" : "keyval:: =",
@@ -54,6 +56,7 @@ for onepath in DATAS_DIR.walk("file::**.peuf"):
         mode    = MODE[badorgood]
     )
 
+
 @fixture(scope="module")
 def or_datas(request):
     for badorgood, datas in THE_DATAS_FOR_TESTING.items():
@@ -69,26 +72,50 @@ def or_datas(request):
 
 
 # --------------- #
-# -- BAD DATAS -- #
+# -- GOOD REFS -- #
 # --------------- #
+# See /test/extract/model.py
 
-def test_extract_splitrefs_bad(or_datas):
-    datas = THE_DATAS_FOR_TESTING["bad"]
-
-    for _, infos in datas.items():
-        for testname, keysvalues in infos.mydict("tree std nosep nonb").items():
-            with raises(ValueError):
-                SPLITWITHEXTRAS(keysvalues["text"])
-
-
-# ---------------- #
-# -- GOOD DATAS -- #
-# ---------------- #
-
-# See /test/extract/refs_nb_page/test_refs_nb_page.py
+from cdt.config.references.exercices import NB_AND_PAGE_REFS
 
 def stdvalue(key, value):
-    if key == "links":
+    if key in NB_AND_PAGE_REFS:
+        nbpages = []
+
+        for nbpage in value.split("|"):
+            oneref = []
+
+            for nblike in nbpage.split(","):
+                nblike_type, nblike_value = nblike.split(":")
+
+                nblike_type  = nblike_type.strip()
+                nblike_value = nblike_value.strip()
+
+                if nblike_type == "empty":
+                    oneref.append({'type': nblike_type})
+
+                else:
+                    oneref.append({
+                        'type' : nblike_type,
+                        'value': nblike_value
+                    })
+
+            nbpages.append(oneref)
+
+        return nbpages
+
+    elif key == "title":
+        return [title.strip() for title in value.split('|')]
+
+    elif key == "section":
+        level, section = value.split('::')
+
+        return {
+            'section': section.strip(),
+            'level'  : int(level)
+        }
+
+    elif key == "links":
         all_links = []
 
         for piece in value.split('|'):
@@ -125,7 +152,7 @@ def stdvalue(key, value):
         return [x.strip() for x in value.split("|")]
 
 
-def test_extract_splitrefs_good(or_datas):
+def test_extract_refs_perso_good(or_datas):
     datas = THE_DATAS_FOR_TESTING["good"]
 
     for _, datatest in datas.items():
@@ -139,12 +166,15 @@ def test_extract_splitrefs_good(or_datas):
                 infoswanted = []
 
                 for key, value in infos.items(noid = True):
-                    if key == "value":
-                        infoswanted.append({key: value})
+                    value = stdvalue(key, value)
+
+                    if key == "title":
+                        for title in value:
+                            infoswanted.append({key: title})
 
                     else:
-                        infoswanted[-1][key] = stdvalue(key, value)
+                        infoswanted[-1][key] = value
 
-                infosfound = SPLITWITHEXTRAS(text)
+                infosfound = REFSPERSO(text)
 
                 assert infoswanted == infosfound

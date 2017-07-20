@@ -1,8 +1,0 @@
-single_one::
-    input::
-        2p101 [link 1 | link 2]
-
-    output::
-        exe   = int: 2 , int: 101
-        links = link 1
-              | link 2

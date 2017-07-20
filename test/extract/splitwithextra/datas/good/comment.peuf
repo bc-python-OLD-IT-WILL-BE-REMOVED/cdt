@@ -4,7 +4,7 @@ single_comment::
 
     output::
         value   = pw     p101
-        comment = one comment
+        comments = one comment
 
 
 several_comments::
@@ -13,13 +13,13 @@ several_comments::
 
     output::
         value   = 3p101
-        comment = comment 1
+        comments = comment 1
 
         value   = 9p10
-        comment = comment 2, ok ?
+        comments = comment 2, ok ?
 
         value   = exa 9p10...4p7
-        comment = comment 3
+        comments = comment 3
 
 
 one_isolated_comment::
@@ -30,6 +30,6 @@ one_isolated_comment::
         value = 3p101
 
         value   = 9p10
-        comment = comment alone
+        comments = comment alone
 
         value = exa 9p10...4p7

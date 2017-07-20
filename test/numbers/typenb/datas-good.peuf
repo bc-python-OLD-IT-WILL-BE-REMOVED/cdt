@@ -3,7 +3,7 @@ empty::
 
 
     infos::
-        type = NONE_NB
+        type = EMPTY_NB
 
 
 integer::
@@ -15,19 +15,28 @@ integer::
         value = 1
 
 
-toc_1::
+alpha::
+    text::
+        a
+
+    infos::
+        type  = ALPHA_NB
+        value = a
+
+
+mix_1::
     text::
         I-1
 
     infos::
-        type  = TOC_NB
+        type  = MIX_NB
         value = I-1
 
 
-toc_2::
+mix_2::
     text::
         C-I-1-2
 
     infos::
-        type  = TOC_NB
+        type  = MIX_NB
         value = C-I-1-2

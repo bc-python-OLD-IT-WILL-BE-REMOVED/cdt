@@ -2,23 +2,16 @@
 
 """
 prototype::
-    date = 2017-06-20    ???
+    date = 2017-06-20
 
 
-????
+This module is used to manage references in the pedagogical log.
 """
 
-from copy import deepcopy
-import datetime
 import re
-
-from mistool.date_use import translate
-from mistool.string_use import between
 
 from cdt.tools.extract.split import *
 from cdt.tools.number import *
-# from cdt.tools.indent import manage as manage_indent
-
 
 
 # --------------- #
@@ -29,6 +22,11 @@ NB_PAGE_TAG, TITLE_TAG = "nbpage", "title"
 
 FIRST_LETTERS = re.compile("(?P<kind>^[a-zA-Z]+)(?P<value>.*$)")
 
+
+# ----------- #
+# -- TOOLS -- #
+# ----------- #
+
 def build_some_refs(text, refbuilder):
     """
 prototype::
@@ -36,13 +34,13 @@ prototype::
 
     arg = str: text ;
           a text using commas to separate pieces of infos where each info can
-          have a comment inside ``(...)``, some links inside ``[...]`` and/or
-          contexts ``{...}``.
+          have a comments inside ``(...)``, some links inside ``[...]`` and/or
+          contexts inside ``{...}``.
     arg = func: refbuilder ;
           this function is used to pre-analyzed each pieces of infos found
 
     return = list(dict) ;
-             a list of dictionary with infos ready to be truly analyzed
+             a list of dictionary with infos ready to be analyzed
 
 
 info::
@@ -89,42 +87,48 @@ prototype::
     see = build_some_refs , build_nb_page
 
     arg = str: text ;
-          a text using commas to separate different kinds of exercices with optional comment inside ``(...)``, links inside ``[...]`` and contexts ``{...}``.
+          a text using commas to separate different kinds of exercices with
+          optional comments inside ``(...)``, links inside ``[...]`` and
+          contexts inside ``{...}``.
 
     return = list(dict) ;
              a list of dictionary having always a key indicating the kind of
-             exercice with corresponding value a list giving the number and
-             page for the exercice.
-             The optional keys key ``LINKS_TAG``, key ``COMMENTS_TAG`` and
+             exercice with corresponding value being a list giving the number
+             and the page of the exercice.
+             The optional keys ``LINKS_TAG``, key ``COMMENTS_TAG`` and
              ``CONTEXTS_TAG`` can appear if ``[...]``, ``(...)`` and ``{...}``
-             respectively have been used.
+             have been used respectively.
 
 
-The following example shows how the the values returned look like (the
-output has been hand formatted). All the job is done by the functions
-``build_some_refs`` and ``build_nb_page``.
+The following example shows how the values returned look like (the output has
+been hand formatted). All the job is done by the functions ``build_some_refs``
+and ``build_nb_page``.
 
 pyterm::
-    >>> from cdt.tools import extract
-    >>> print(extract.refs_nb_page(
-    ...     "3p101, exa 9p10...4 (one comment) [link 1 | link 2]"
+    >>> from cdt.tools.extract import ref
+    >>> print(ref.refs_nb_page(
+    ...     "3p101, exa 9p10...4 (one comment) [@link 1 | @link 2]"
     ... ))
     [
         {
             'exercise': [
-                [{'type': 'int', 'value': '3'},
-                 {'type': 'int', 'value': '101'}]
+                [{'value': '3', 'type': 'int'},
+                 {'value': '101', 'type': 'int'}]
             ]
         },
         {
             'example': [
-                [{'type': 'int', 'value': '9'},
-                 {'type': 'int', 'value': '10'}],
-                [{'type': 'int', 'value': '4'},
+                [{'value': '9', 'type': 'int'},
+                 {'value': '10', 'type': 'int'}
+                ],
+                [{'value': '4', 'type': 'int'},
                  {'type': 'empty'}]
             ],
             'comments': ['one comment'],
-            'links'   : ['link 1', 'link 2']
+            'links': [
+                {'url': 'link 1', 'title': ''},
+                {'url': 'link 2', 'title': ''}
+            ]
         }
     ]
     """
@@ -141,7 +145,7 @@ prototype::
     return = str, list(dict(str: str), dict(str: str)) ;
              the string indicates the kind of exercice, and each dictionaries
              in the list indicates at least a type associated to the key
-             ``'type'`` which can be ``''`` to indicate a missing number.
+             ``'type'`` which can be ``'empty'`` to indicate a missing number.
              If it is not the case, the value is indicated with the key
              ``'value'``.
     """
@@ -184,28 +188,37 @@ prototype::
     return = [dict(str: str), dict(str: str)] ;
              each dictionary is built by the function ``tools.numbers.typenb``.
              The first one is for the number of the exercice, maybe an "empty"
-             one, and the second one is for the page that can also be an "empty"
-             reference
+             one, and the second one is for the page that can also be "empty"
 
 
 Here are some examples of use (the outputs have been hand formatted).
 
 pyterm::
-    >>> from cdt.tools import extract
-    >>> print(extract.normalize_nb_page("1p222"))
+    >>> from cdt.tools.extract import ref
+    >>> print(ref.normalize_nb_page("1p222"))
     [
         {'type': 'int', 'value': '1'},
         {'type': 'int', 'value': '222'}
     ]
-    >>> print(extract.normalize_nb_page("p222"))
+    >>> print(ref.normalize_nb_page("p222"))
     [
         {'type': 'empty'},
         {'type': 'int', 'value': '222'}
     ]
-    >>> print(extract.normalize_nb_page("1"))
+    >>> print(ref.normalize_nb_page("1"))
     [
         {'type': 'int', 'value': '1'},
         {'type': 'empty'}
+    ]
+    >>> print(ref.normalize_nb_page("I p iv"))
+    [
+        {'value': 'I', 'type': 'alpha'},
+        {'value': 'iv', 'type': 'alpha'}
+    ]
+    >>> print(ref.normalize_nb_page("I-a-1 p 4"))
+    [
+        {'value': 'I-a-1', 'type': 'mix'},
+        {'value': '4', 'type': 'int'}
     ]
     """
     oneref = oneref.strip()
@@ -231,42 +244,44 @@ pyterm::
 def refs_perso(text):
     """
 prototype::
-    see = splitwithextras
+    see = tools.extract.split.splitwithextras
 
     arg = str: text ;
-          several personal references that are documents eventually with links
-          associated
-
+          several personal references for documents eventually with optional
+          comments inside ``(...)``, links inside ``[...]`` and contexts inside
+          ``{...}``.
 
     return = list(dict) ;
-             a list of dictionary with infos ready to be truly analyzed (see
-             the examples above)
-
-
-    return = [dict] ;
              a list of dictionary having always the key ``TITLE_TAG`` with
              corresponding value a string indicating the title of a document.
-             The optional keys key ``LINKS_TAG``, key ``COMMENTS_TAG`` and
+             The optional keys ``LINKS_TAG``, key ``COMMENTS_TAG`` and
              ``CONTEXTS_TAG`` can appear if ``[...]``, ``(...)`` and ``{...}``
              respectively have been used.
 
 
-The following example shows how the the values returned look like (the output
-has been hand formatted). All the job is done by the functions ``build_some_refs``
+The following example shows how the values returned look like (the output has
+been hand formatted). All the job is done by the functions ``build_some_refs``
 and ``build_perso``.
 
 pyterm::
-    >>> from cdt.tools import extract
-    >>> print(extract.refs_perso(
-    ...     "1st title, 2nd title [link 1 | link 2] (comment) {context}"
+    >>> from cdt.tools.extract import ref
+    >>> print(ref.refs_perso(
+    ...     "1st title, 2nd title [@ link 1 | @ link 2] (comment) {context}"
     ... ))
     [
         {'title': '1st title'},
         {
-            'title'   : '2nd title',
+            'title': '2nd title',
             'comments': ['comment'],
-            'contexts': ['context'],
-            'links'   : ['link 1', 'link 2']
+            'contexts': [{
+                'value': 'context',
+                'which': '',
+                'type': ''
+            }]
+            'links': [
+                {'url': 'link 1', 'title': ''},
+                {'url': 'link 2', 'title': ''}
+            ],
         }
     ]
     """

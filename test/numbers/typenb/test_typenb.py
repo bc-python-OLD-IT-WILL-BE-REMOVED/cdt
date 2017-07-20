@@ -15,7 +15,7 @@ from orpyste.data import ReadBlock as READ
 # -- MODULE TESTED -- #
 # ------------------- #
 
-from cdt.tools import numbers
+from cdt.tools import number
 
 
 # ----------------------- #
@@ -24,10 +24,10 @@ from cdt.tools import numbers
 
 THIS_DIR = PPath(__file__).parent
 
-TYPE_NB = numbers.typenb
+TYPE_NB = number.typenb
 
-VAL_TAG  = numbers.VAL_TAG
-TYPE_TAG = numbers.TYPE_TAG
+VAL_TAG  = number.VAL_TAG
+TYPE_TAG = number.TYPE_TAG
 
 
 # ----------------------- #
@@ -67,7 +67,7 @@ def or_datas(request):
 # -- BAD NUMBERS -- #
 # ----------------- #
 
-def test_numbers_typenb_bad(or_datas):
+def test_number_typenb_bad(or_datas):
     infos = THE_DATAS_FOR_TESTING["bad"]
 
     for testname, lines in infos.mydict("std nosep nonb").items():
@@ -93,7 +93,7 @@ def same_type_val(infosfound, ref):
         assert infosfound[VAL_TAG] == infoswanted[VAL_TAG]
 
 
-def test_numbers_typenb_good(or_datas):
+def test_number_typenb_good(or_datas):
     infos = THE_DATAS_FOR_TESTING["good"]
 
     lasttestname = None
@@ -123,7 +123,7 @@ def test_numbers_typenb_good(or_datas):
                 justval = valinfos['value']
 
                 if key == "type":
-                    infosfound[TYPE_TAG] = numbers.__dict__[justval]
+                    infosfound[TYPE_TAG] = number.__dict__[justval]
 
                 elif key == "value":
                     infosfound[VAL_TAG] = justval
