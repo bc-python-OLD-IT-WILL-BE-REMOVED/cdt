@@ -2,7 +2,7 @@
 
 """
 prototype::
-    date = 2017-06-20
+    date = 2017-07-20
 
 
 This module is used to manage references in the pedagogical log.
@@ -34,7 +34,7 @@ prototype::
 
     arg = str: text ;
           a text using commas to separate pieces of infos where each info can
-          have a comments inside ``(...)``, some links inside ``[...]`` and/or
+          have comments inside ``(...)``, some links inside ``[...]`` and/or
           contexts inside ``{...}``.
     arg = func: refbuilder ;
           this function is used to pre-analyzed each pieces of infos found
@@ -64,19 +64,50 @@ info::
 
 # Do we have to add extra infos automatically ?
                 j = i
+                newextras = []
 
-                if extras[:3] == "...":
-                    extras = extras[3:]
+                for oneextra in extras:
+                    autopopulate = False
 
-                    for k in range(i-1, -1, -1):
-                        if tag in infos[k]:
-                            break
+                    if isinstance(oneextra, dict):
+                        for key in ["title", "value"]:
+                            if key in oneextra:
+                                if oneextra[key][:3] == "...":
+                                    oneextra[key] = oneextra[key][3:].lstrip()
+                                    autopopulate = True
 
-                        else:
-                            j = k
+                                break
+
+                    else:
+                        if oneextra[:3] == "...":
+                            autopopulate = True
+                            oneextra = oneextra[3:].strip()
+
+                    if autopopulate:
+                        for k in range(i-1, -1, -1):
+                            if tag in infos[k]:
+                                break
+
+                            else:
+                                j = k
+
+                    newextras.append(oneextra)
 
                 for k in range(j, i+1):
-                    infos[k][tag] = extras
+                    infos[k][tag] = newextras
+
+# Remove the empty extra infos.
+    for i, oneinfo in enumerate(infos):
+        somethingdone = False
+        for tag, emptyval in EMPTY_EXTRAS.items():
+            val = oneinfo.get(tag, None)
+
+            if val == emptyval:
+                somethingdone = True
+                del oneinfo[tag]
+
+        if somethingdone:
+            infos[i] = oneinfo
 
     return infos
 

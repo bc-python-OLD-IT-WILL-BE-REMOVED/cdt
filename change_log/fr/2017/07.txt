@@ -1,4 +1,11 @@
 ==========
+2017-07-20
+==========
+
+**Du nouveau pour les infos supplémentaires des références :** il est maintenant possible d'utiliser des points de suspension ``...``. Ceci a nécessité l'ajout du décorateur ``build_empty`` dans le module ``split`` pour une gestion simple.
+
+
+==========
 2017-07-19
 ==========
 

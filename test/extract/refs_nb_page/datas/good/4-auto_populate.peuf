@@ -1,0 +1,125 @@
+comment_everywhere::
+    input::
+        7p8 , 9p10 , 30p20 (   ...     auto commented)
+
+    output::
+        exe      = int: 7 , int: 8
+        comments = auto commented
+
+        exe      = int: 9 , int : 10
+        comments = auto commented
+
+        exe      = int: 30 , int: 20
+        comments = auto commented
+
+
+comment_empty::
+    input::
+        7p8 (empty) , 9p10 , 30p20 (   ...     auto commented)
+
+    output::
+        exe = int: 7 , int: 8
+
+        exe      = int: 9 , int : 10
+        comments = auto commented
+
+        exe      = int: 30 , int: 20
+        comments = auto commented
+
+
+comment_stop_by_comment::
+    input::
+        7p8 (one comment) , 9p10 , 30p20 (   ...     auto commented)
+
+    output::
+        exe      = int: 7 , int: 8
+        comments = one comment
+
+        exe      = int: 9 , int : 10
+        comments = auto commented
+
+        exe      = int: 30 , int: 20
+        comments = auto commented
+
+
+link_empty::
+    input::
+        1p2 [empty], 3p4 , 5p6 [... @ link auto]
+
+    output::
+        exe = int: 1 , int : 2
+
+        exe   = int: 3 , int : 4
+        links = @ link auto
+
+        exe   = int: 5 , int : 6
+        links = @ link auto
+
+
+link_stop_by_link::
+    input::
+        1p2 [@ lien stop ], 3p4 , 5p6 [... @ link auto]
+
+    output::
+        exe   = int: 1 , int : 2
+        links = @ lien stop
+
+        exe   = int: 3 , int : 4
+        links = @ link auto
+
+        exe   = int: 5 , int : 6
+        links = @ link auto
+
+
+context_stop_by_context::
+    input::
+        1p2 { context stop }, 3p4 , 5p6 {... context auto}
+
+    output::
+        exe      = int: 1 , int : 2
+        contexts =  :: :: context stop
+
+        exe      = int: 3 , int : 4
+        contexts =  :: :: context auto
+
+        exe      = int: 5 , int : 6
+        contexts =  :: :: context auto
+
+
+context_empty::
+    input::
+        1p2 {   empty   }, 3p4 , 5p6 {... context auto}
+
+    output::
+        exe = int: 1 , int : 2
+
+        exe      = int: 3 , int : 4
+        contexts =  :: :: context auto
+
+        exe      = int: 5 , int : 6
+        contexts =  :: :: context auto
+
+
+the_big_one::
+    input::
+        1p2 {empty} , 3p4 (empty) , 5p6 [empty], 7p8, 9p10  (... auto commented) {... context auto} [... @ link auto]
+
+    output::
+        exe = int: 1 , int : 2
+
+        exe      = int: 3 , int : 4
+        contexts =  :: :: context auto
+
+        exe      = int: 5 , int : 6
+        comments = auto commented
+        contexts =  :: :: context auto
+
+        exe      = int: 7 , int : 8
+        comments = auto commented
+        contexts =  :: :: context auto
+        links    = @ link auto
+
+        exe      = int: 9 , int : 10
+        comments = auto commented
+        contexts =  :: :: context auto
+        links    = @ link auto

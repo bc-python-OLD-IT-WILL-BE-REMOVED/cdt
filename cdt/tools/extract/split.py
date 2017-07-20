@@ -2,7 +2,7 @@
 
 """
 prototype::
-    date = 2017-06-20
+    date = 2017-07-20
 
 
 This module gives tools to split infos given just for one day.
@@ -19,6 +19,11 @@ SEPARATOR = "|"
 
 COMMENTS_TAG, CONTEXTS_TAG, LINKS_TAG = "comments", "contexts", "links"
 
+EMPTY_EXTRAS = {
+    COMMENTS_TAG: [''],
+    CONTEXTS_TAG: [{'type': '', 'value': '', 'which': ''}],
+    LINKS_TAG   : [{'title': '', 'url': ''}]
+}
 
 # ----------- #
 # -- TOOLS -- #
@@ -55,6 +60,34 @@ warning::
         pieces.append(onepiece)
 
     return pieces
+
+
+def build_empty(method):
+    """
+prototype::
+    see = _splitwithextras.build_one_comment ,
+          _splitwithextras.build_one_context,
+          _splitwithextras.build_one_link
+
+This decorator manages emtpy comments, contexts and links used to stop
+automatic propagation of extra ¨infos indicating using ``...``.
+    """
+    def method_dec(cls, text):
+        text = text.strip()
+
+        if text == "empty":
+            if method.__name__ in [
+                "build_one_comment",
+                "build_one_context"
+            ]:
+                text = ""
+
+            elif method.__name__ == "build_one_link":
+                text = "@"
+
+        return method(cls, text)
+
+    return method_dec
 
 
 class _splitwithextras():
@@ -216,7 +249,7 @@ prototype::
 
         return part_1.strip(), part_2.strip()
 
-
+    @build_empty
     def build_one_comment(self, text):
         """
 prototype::
@@ -229,6 +262,7 @@ prototype::
         return text
 
 
+    @build_empty
     def build_one_context(self, text):
         """
 prototype::
@@ -266,6 +300,7 @@ prototype::
         }
 
 
+    @build_empty
     def build_one_link(self, text):
         """
 prototype::
@@ -282,9 +317,6 @@ prototype::
             text = text,
             sep  = "@"
         )
-
-        if not url:
-            raise ValueError("missing url in a link")
 
         return {
             "title": title,
