@@ -1,9 +1,0 @@
-nokind::
-    input::
-        1p3 {toc:: A-II , A-V | toc-book:: X | hors toc}
-
-    output::
-        exe      = int: 1 , int: 3
-        contexts = toc ::      :: A-II , A-V
-                 | toc :: book :: X
-                 |     ::      :: hors toc

@@ -1,8 +1,0 @@
-nothing_before_comment::
-    text = (something before missing) , end
-
-text_after_comment::
-    text = start (one comment) illegal text, end
-
-text_between_comment_link::
-    text = start (one comment) illegal text [link], end
