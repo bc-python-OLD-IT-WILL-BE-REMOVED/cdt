@@ -1,0 +1,5 @@
+==========
+2017-10-???
+==========
+
+**First version of the new ¨cdt:** this project is a total refactoring of tool to write a pedagogical log which are called "[c]ahier [d]e [t]exte" in french. The aim of this version is to be used by other users that the author of ¨cdt so this needs to try to do a good job.

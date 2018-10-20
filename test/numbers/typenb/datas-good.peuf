@@ -1,0 +1,42 @@
+empty::
+    text::
+
+
+    infos::
+        type = EMPTY_NB
+
+
+integer::
+    text::
+        1
+
+    infos::
+        type  = INT_NB
+        value = 1
+
+
+alpha::
+    text::
+        a
+
+    infos::
+        type  = ALPHA_NB
+        value = a
+
+
+mix_1::
+    text::
+        I-1
+
+    infos::
+        type  = MIX_NB
+        value = I-1
+
+
+mix_2::
+    text::
+        C-I-1-2
+
+    infos::
+        type  = MIX_NB
+        value = C-I-1-2

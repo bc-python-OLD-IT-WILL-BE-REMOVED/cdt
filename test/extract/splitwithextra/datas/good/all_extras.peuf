@@ -1,0 +1,31 @@
+all_alone::
+    input::
+        3p101 (comment), 9p10 [@link]   , exa 9p10...4p7 {reference}
+
+    output::
+        value   = 3p101
+        comments = comment
+
+        value = 9p10
+        links = @ link
+
+        value    = exa 9p10...4p7
+// type :: which :: value
+        contexts = none :: none :: reference
+
+
+
+all_together::
+    input::
+        3p101, 9p10 [@link]  {reference}  (comment) , exa 9p10...4p7
+
+    output::
+        value = 3p101
+
+        value    = 9p10
+        comments = comment
+// type :: which :: value
+        contexts = none :: none :: reference
+        links    = @ link
+
+        value = exa 9p10...4p7

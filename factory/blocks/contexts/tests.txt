@@ -1,0 +1,19 @@
+// The blocks allowed for tests.
+//
+// See ``settings.txt`` for infos about the values used in this peuf file.
+
+main::
+    keyval::
+        seps : =
+        names: lesson
+               home
+               test
+               info
+               mcq
+
+
+lesson-home-test-info-mcq::
+    date  = :date:
+    time  = :time:
+    ref   = :refs_toc:
+    title

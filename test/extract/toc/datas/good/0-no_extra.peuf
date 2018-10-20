@@ -1,0 +1,66 @@
+alone_inline::
+    input::
+        C-I-1
+
+    output::
+        section = 0 :: C
+        section = 1 :: I
+        section = 2 :: 1
+
+
+alone_tabulated::
+    input::
+        C
+            I
+                1
+
+    output::
+        section = 0 :: C
+        section = 1 :: I
+        section = 2 :: 1
+
+
+alone_mix::
+    input::
+        C
+            I-1-a
+
+    output::
+        section = 0 :: C
+        section = 1 :: I
+        section = 2 :: 1
+        section = 3 :: a
+
+
+range::
+    input::
+        C-I...C-III-1-a
+
+    output::
+        section = -1 :: range
+        start   = 0 :: C
+                | 1 :: I
+        end     = 0 :: C
+                | 1 :: III
+                | 2 :: 1
+                | 3 :: a
+
+
+
+
+
+several_ones::
+    input::
+        A , B-I , C-I...C-III
+
+    output::
+        section = 0 :: A
+
+        section = 0 :: B
+        section = 1 :: I
+
+        section = -1 :: range
+        start   = 0 :: C
+                | 1 :: I
+        end     = 0 :: C
+                | 1 :: III
