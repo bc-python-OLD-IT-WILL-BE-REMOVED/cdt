@@ -1,0 +1,11 @@
+==========
+2017-05-30
+==========
+
+**Gestion avancée des commentaires, des liens et des contextes dans le module ``tools.extract``.**
+
+    1) Retour à ``COMMENTS_TAG = "comments"`` avec un "s" et une liste de chaînes de caractères pour stocker les données tout comme pour ``CONTEXTS_TAG = "contexts"`` et ``LINKS_TAG = "links"``.
+
+    1) Gestion des liens et des contextes dans la fonction ``build_some_refs`` via les fonctions ``build_comments``, ``build_links`` et ``build_contexts``.
+
+    1) Gestion de ``...`` pour l'ajout automatique de commentaires, de liens ou de contextes.

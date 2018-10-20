@@ -1,0 +1,50 @@
+==========
+2017-07-23
+==========
+
+**Création du fichier path::``time.py`` dans le module ``tools.extract`` :** ce fichier gère tout ce qui concerne la ¨1ERE extraction des données relatives aux dates (les durées seront gérées sous peu).
+
+
+**Nouvelle factorisation du code du module ``tools``.**
+
+    1) Le fichier path::``split.py`` a été renommé path::``common.py``. Voici ce que contient ce fichier.
+
+        * En plus des fonctions de l'ancien fichier path::``split.py``, il y a la fonction ``build_prerefs_and_ctxts`` dont le code est exactement le même que celui de l'ancienne fonction ``build_some_refs`` du fichier ``ref.py``.
+
+        * Création d'une fonction ``build_range`` dans le fichier path::``common.py``.
+
+        * La fonction ``splitwithextras`` possède maintenant un argument optionnel ``sep`` valant ``","`` par défaut. Ceci permet de gérer aussi des listes de dates indiquées via ``sep = "&"``.
+
+    1) La fonction ``build_some_refs`` du fichier path::``ref.py`` a été déplacée dans path::``common.py``, puis renommée (voir le point précédent).
+
+    1) Dans les fichiers ``ref.py`` et ``toc.py``, les codes ont été adaptés aux ¨chgts ci-dessus.
+
+
+==========
+2017-07-20
+==========
+
+**Propagation automatique des commentaires, des contextes ¨etou des liens
+pour les références :** il est maintenant possible d'utiliser des points de suspension ``...`` pour propager automatiquement des commentaires, des contextes ¨etou des liens. En interne, ceci a nécessité l'ajout du décorateur ``build_empty`` dans le module ``split`` pour une gestion simple.
+
+
+==========
+2017-07-19
+==========
+
+**Amélioration côté développement interne :** ¨flake8 et ¨pylint sont consultés pour améliorer le code de ¨cdt lorsque cela paraît pertinent.
+
+
+==========
+2017-07-17
+==========
+
+**Modifications liés à l'ancien module ``numbers``.**
+
+    1) << ATTENTION ! >> Le module ``numbers`` s'appelle maintenant ``number`` sans "s"  à la fin.
+
+    2) Utilisation d'un dictionnaire nommé ``RE_TYPE`` afin de faciliter l'ajout de nouveaux types.
+
+    3) Le type ``"toc"`` a disparu.
+
+    4) Ajout du type ``"alpha"`` pour des numérotations alphabétiques, et du type ``"mix"`` pour des numérotations du type ``"I-a-1"`` (ceci correspond à l'ancien type ``"toc"``).
