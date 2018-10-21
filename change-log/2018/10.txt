@@ -2,13 +2,10 @@
 2017-10-???
 ==========
 
-**Just starting a new version ¨cdt:** this project is a total refactoring of tool to write a pedagogical log which are called "[c]ahier [d]e [t]exte" in french. The aim of this version is to be used by other users than the author of ¨cdt.
+**Serious new build of the brand new ¨cdt:** this project is a total refactoring of tools to write a pedagogical log which are called "[c]ahier [d]e [t]exte" in french. The aim of this version is to be used by other users than the author of ¨cdt.
 
 
-**???:** ???
+????   **Pronotes (C) timetable:** Pronotes (C) is a french tool used to communicate with parents of students. This service can export the timetable of a teacher using the ¨icalc format. This export is supported by ¨cdt to define the timetable of the teacher using ¨cdt.
 
 
-**???:** ???
-
-
-**???:** ???
+????   **French holidays:** web scraping is used to build internal variables giving the french holidays. Other countries could be managed (this is not the priority of the author of ¨cdt but technically the holidays can be international ones).

@@ -1,4 +1,4 @@
-NON UTILISABLE POUR LE MOMENT !!!
-=================================
+NOTHING FUNCTIONAL FOR THE MOMENT !!!
+=====================================
 
-Patience, patience... 
+Be patient...

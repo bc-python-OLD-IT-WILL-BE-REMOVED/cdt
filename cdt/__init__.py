@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+__version__ = "0.0.0-beta"
+
+# flake8 --ignore E115,E122,E203,E221,E251,E302,E303 ...
+# pylint ...
