@@ -40,9 +40,7 @@ def cleanterm():
 
 def goodbye():
     print()
-
     footer_1("Good bye !")
-
     print()
 
     exit()
@@ -109,12 +107,24 @@ def ask(legalchoices):
     return choice
 
 
-def yesno(description):
+def yesno(
+    description,
+    cango_up = False
+):
     print(description)
+    print()
 
-    print("Type [y]es or [n]o.")
+    if cango_up:
+        message      = "Type [y]es, [n]o or [u] to go up. "
+        legalchoices = [YES, NO, GO_UP_CHOICE]
 
-    return ask([YES, NO])
+    else:
+        message      = "Type [y]es or [n]o. "
+        legalchoices = [YES, NO]
+
+    print(message, end = "")
+
+    return ask(legalchoices)
 
 
 def dotherightchoice(
@@ -124,8 +134,10 @@ def dotherightchoice(
     cango_up,
     extrachoices
 ):
+    space = " "*2
+
     choices = ("\n" + TAB).join([
-        f"[{choice}]  {capitalize_funcname(desc)}"
+        f"[{choice}]{space}{capitalize_funcname(desc)}"
         for choice, desc in enumerate(descriptions, 1)
     ])
 
@@ -140,13 +152,13 @@ def dotherightchoice(
         choices += "\n"
 
         if cango_up:
-            choices \
-            += "\n" + TAB + f"[{GO_UP_CHOICE}]  GO UP to the previous menu."
+            choices += "\n" + TAB \
+                    + f"[{GO_UP_CHOICE}]{space}GO UP to the previous menu."
 
             legalchoices.append(GO_UP_CHOICE)
             nointchoices.append(GO_UP_CHOICE)
 
-        choices += "\n" + TAB + f"[{QUIT_CHOICE}]  QUIT the application."
+        choices += "\n" + TAB + f"[{QUIT_CHOICE}]{space}QUIT the application."
 
         legalchoices.append(QUIT_CHOICE)
         nointchoices.append(QUIT_CHOICE)
@@ -170,12 +182,12 @@ Choose what you want to do.
 
 def menu(
     glob,
-    version,
-    cango_up,
-    header,
     descriptions,
-    clearterminal = True,
-    extrachoices  = True
+    header        = None,
+    version       = None,
+    cango_up      = False,
+    extrachoices  = True,
+    clearterminal = True
 ):
     while True:
         if clearterminal:
@@ -252,37 +264,54 @@ def funcname(tuitext):
 # -- LET'S PLAY WITH PATHS -- #
 # --------------------------- #
 
+# NEW  : a directory to create.
+# EMPTY: a directory to create or an empty one.
+DIR_MUST_BE_NEW, DIR_MUST_BE_EMPTY = range(2)
+
 def choosedir(
     description,
-    canbenew = False
+    constraint
 ):
     print()
     print(description)
 
     while True:
-        choice = input(" "*4 + "Path to the directory:\n" + " "*4 + "--> ")
+        choice = input("\nPath to the directory:\n--> ")
         choice = choice.strip()
         choice = choice.replace("\ ", " ")
 
         ppath = PPath(choice)
 
-        if canbenew or ppath.is_dir():
-            break
-
-        print()
-
-
+# An existing file.
         if ppath.is_file():
+            print()
             print(
                 "The path points to a file !",
                 end = " "
             )
 
+# An existing directory.
+        elif ppath.is_dir():
+            if mustbenew:
+                print()
+                print(
+                    "We need a new directory !",
+                    end = " "
+                )
+
+            elif mustbeempty and not ppath.is_empty():
+                print()
+                print(
+                    "We need an empty directory !",
+                    end = " "
+                )
+
+            else:
+                break
+
+# A new directory.
         else:
-            print(
-                "The path does not point to an existing directory.",
-                end = " "
-            )
+            break
 
         print("Try again.")
 

@@ -3,6 +3,14 @@
 from tools import tui
 
 
+# --------------- #
+# -- TIMETABLE -- #
+# --------------- #
+
+
+# ------------ #
+# -- MONTHS -- #
+# ------------ #
 
 
 
@@ -11,74 +19,65 @@ from tools import tui
 
 
 
-# ----------------------------- #
-# -- TUI - FUNCTIONS TO CALL -- #
-# ----------------------------- #
 
-def presonal_tui(version):
-# Path of the directory.
-    ppath = tui.choosedir(
-        canbenew    = True,
-        description = "+ Choose a directory where to build files "
-                      "needed for your CdT log."
-    )
-
-
-    if ppath.is_dir():
-        isnewdir = False
-
-        print()
-
-        yesno = tui.yesno(
-            description = "+ The directory is not empty. "
-                          "Do you still want to use it for your CdT log ?"
-        )
-
-        if yesno == tui.NO:
-            return
-
-    else:
-        isnewdir = True
-
-# Creation of a new directory.
-    print()
-
-    if isnewdir:
-        try:
-            ppath.create("dir")
-
-        except:
-            print("+ We can't build the following directory:")
-            print(" "*4 + f"--> {ppath}")
-            print()
-
-            return
-
-# Initialization of the CdT.
-    print("+ ??????")
-    OKKKK
-
-
-def default_tui(version):
-    OKKKK
-
+# ----------------- #
+# -- TUI - BUILD -- #
+# ----------------- #
 
 def build_tui(version):
     tui.menu(
         glob          = globals(),
         version       = version,
         cango_up      = True,
-        header        = None,
         clearterminal = False,
         descriptions  = [
             x.strip() for x in """
-                [[presonal]] directory.
-                [[default]] directory.
+                [[default]] directory (recommended option).
+                [[personal]] directory.
             """.strip().split("\n")
         ]
     )
 
 
+def personal_tui(version):
+# Path of the directory.
+    createdirectory = None
+
+    while createdirectory != tui.YES:
+        ppath = tui.choosedir(
+            constraint  = tui.DIR_MUST_BE_EMPTY,
+            description = "+ Choose a directory where to build files "
+                          "needed for your CdT logs."
+        )
+
+        createdirectory = tui.yesno(
+            cango_up    = True,
+            description = "\nDo you want to use/create the directory "
+                          "with the following full path ?"
+                          f"\n--> {ppath.absolute()}"
+        )
+
+        if createdirectory == tui.GO_UP_CHOICE:
+            return
+
+
+# Creation of the new directory.
+    if not ppath.is_dir():
+        try:
+            ppath.create("dir")
+
+        except:
+            print()
+            print("+ We can't build the following directory:")
+            print(" "*4 + f"--> {ppath}")
+            print()
+
+            return
+
+# Initialization of the directory for the CdT logs.
+    print()
+    print("+ ??????")
+    OKKKK
 
 
 
@@ -86,9 +85,38 @@ def build_tui(version):
 
 
 
+def default_tui(version):
+    raise NotImplementedError("Coming soon...")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ----------------- #
+# -- TUI - RESET -- #
+# ----------------- #
 
 def reset_tui(version):
     TODO
+
+
+
+
+
+
+
+
 
 
 # -------------- #
@@ -103,11 +131,11 @@ def menu(
         glob         = globals(),
         version      = version,
         cango_up     = cango_up,
-        header       = "Start or rebuild a CdT log",
+        header       = "Start or rebuild a directory for your CdT logs",
         descriptions = [
             x.strip() for x in """
-                [[build]] a new CdT log.
-                [[reset]] an existing CdT log.
+                [[build]] a new directory for your CdT logs.
+                [[reset]] an existing directory for your CdT logs.
             """.strip().split("\n")
         ]
     )

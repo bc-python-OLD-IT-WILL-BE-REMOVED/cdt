@@ -12,20 +12,35 @@ from tools import tui
 from __init__ import __version__
 
 
+# ---------------------------------- #
+# -- DECORATOIR FOR THE LAZZY MAN -- #
+# ---------------------------------- #
+
+def menufy(func):
+    module = __import__(
+        func.__name__.replace("_tui", "")
+    )
+
+    return  getattr(module, "menu")
+
+
 # ----------------------- #
 # -- FUNCTIONS TO CALL -- #
 # ----------------------- #
 
+@menufy
 def initialize_tui(version):
-    initialize.menu(version)
+    ...
 
 
+@menufy
 def update_tui(version):
-    update.menu(version)
+    ...
 
 
+@menufy
 def publish_tui(version):
-    publish.menu(version)
+    ...
 
 
 # --------------- #
@@ -33,16 +48,12 @@ def publish_tui(version):
 # --------------- #
 
 DESCRIPTIONS = [
-    x.strip() for x in """
+    f"{functionnality.strip()} your CdT logs."
+    for functionnality in """
         [[initialize]]
         [[update]]
         [[publish]]
     """.strip().split("\n")
-]
-
-DESCRIPTIONS = [
-    f"{desc} your pedagogical log."
-    for desc in DESCRIPTIONS
 ]
 
 
