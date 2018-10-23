@@ -292,14 +292,14 @@ def choosedir(
 
 # An existing directory.
         elif ppath.is_dir():
-            if mustbenew:
+            if constraint == DIR_MUST_BE_NEW:
                 print()
                 print(
                     "We need a new directory !",
                     end = " "
                 )
 
-            elif mustbeempty and not ppath.is_empty():
+            elif constraint == DIR_MUST_BE_EMPTY and not ppath.is_empty():
                 print()
                 print(
                     "We need an empty directory !",
