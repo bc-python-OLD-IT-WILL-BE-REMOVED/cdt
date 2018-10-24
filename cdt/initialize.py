@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 
+from mistool.os_use import PPath
+
 from tools import tui
+
+
+# --------------- #
+# -- CONSTANTS -- #
+# --------------- #
+
+THIS_DIR = PPath(__file__).parent
 
 
 # --------------- #
@@ -25,11 +34,13 @@ from tools import tui
 # ----------------- #
 
 def build_tui(version):
+    print()
+
     tui.menu(
         glob          = globals(),
         version       = version,
         cango_up      = True,
-        clearterminal = False,
+        header       = "Build a directory for your CdT logs",
         descriptions  = [
             x.strip() for x in """
                 [[default]] directory (recommended option).
@@ -69,17 +80,29 @@ def personal_tui(version):
         except:
             print()
             print("+ We can't build the following directory:")
-            print(" "*4 + f"--> {ppath}")
+            print(" "*4 + f"--> {ppath.absolute()}")
             print()
 
             return
 
 # Initialization of the directory for the CdT logs.
+#
+# We simply copy the files in the path::``config/template``.
+    template_dir = THIS_DIR / "config" / "template"
+
+    template_dir.copy_to(ppath, safemode = False)
+
+# Everything has been set.
     print()
-    print("+ ??????")
-    OKKKK
+    print("+ The directory has been initialized.")
+    print()
+    print(
+        "Take a look at each files which contain comments "
+        "showing the way to use CdT."
+    )
 
-
+    print()
+    tui.next()
 
 
 
@@ -108,7 +131,7 @@ def default_tui(version):
 # ----------------- #
 
 def reset_tui(version):
-    TODO
+    raise NotImplementedError("Coming soon...")
 
 
 
@@ -131,7 +154,7 @@ def menu(
         glob         = globals(),
         version      = version,
         cango_up     = cango_up,
-        header       = "Start or rebuild a directory for your CdT logs",
+        header       = "Build or reset a directory for your CdT logs",
         descriptions = [
             x.strip() for x in """
                 [[build]] a new directory for your CdT logs.
@@ -146,6 +169,5 @@ def menu(
 # ------------------------------------------------------- #
 
 if __name__ == "__main__":
-    # tui.cleanterm()
     build_tui(None)
     # menu(cango_up = False)

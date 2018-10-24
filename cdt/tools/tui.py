@@ -95,6 +95,10 @@ def footer_1(title):
 # -- CHOICE IS THE LIFE -- #
 # ------------------------ #
 
+def next():
+    input("Type anything to continue.")
+
+
 def ask(legalchoices):
     choice = None
 
@@ -268,6 +272,16 @@ def funcname(tuitext):
 # EMPTY: a directory to create or an empty one.
 DIR_MUST_BE_NEW, DIR_MUST_BE_EMPTY = range(2)
 
+
+def cleanpath_escapedchars(strpath):
+    strpath = strpath.strip()
+
+    for char in " []":
+        strpath = strpath.replace("\\" + char, char)
+
+    return strpath
+
+
 def choosedir(
     description,
     constraint
@@ -277,34 +291,24 @@ def choosedir(
 
     while True:
         choice = input("\nPath to the directory:\n--> ")
-        choice = choice.strip()
-        choice = choice.replace("\ ", " ")
+        choice = cleanpath_escapedchars(choice)
 
         ppath = PPath(choice)
 
 # An existing file.
         if ppath.is_file():
             print()
-            print(
-                "The path points to a file !",
-                end = " "
-            )
+            print("The path points to a file !", end = " ")
 
 # An existing directory.
         elif ppath.is_dir():
             if constraint == DIR_MUST_BE_NEW:
                 print()
-                print(
-                    "We need a new directory !",
-                    end = " "
-                )
+                print("We need a new directory !", end = " ")
 
             elif constraint == DIR_MUST_BE_EMPTY and not ppath.is_empty():
                 print()
-                print(
-                    "We need an empty directory !",
-                    end = " "
-                )
+                print("We need an empty directory !", end = " ")
 
             else:
                 break

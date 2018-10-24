@@ -1,0 +1,102 @@
+general::
+    lang      = fr_FR
+    name      = Christophe, BAL
+    subject   = Mathématiques
+    country   = France
+    city      = Chambéry
+    zipcode   = 73000
+    area      = A
+    institute = Lycée Monge
+    year      = 2016 ; 2017
+
+
+abrev::
+    main = /Users/projetmbc/Google Drive/job/math
+
+
+// Info 1: names of the class must be used to name folders with the infos.
+//
+// Info 2: names can't only use ASCII letters, the underscore and numbers.
+//
+// Info 3: the sorting used will be the same to analyze the datas (this is
+//         important for the CLI tool)
+
+classes::
+    2GT1 = Seconde GT1
+    1S2  = Première S2
+    BTS2 = BTS2 CRC-CRCI
+
+
+groups::
+    AP    = Aide Personnalisée
+    Gpe 1 = Groupe 1
+    Gpe 2 = Groupe 2
+    CRC   = Groupe CRC
+    CRCI  = Groupe CRCI
+
+
+periods::
+    Sem. A       = Semaine A           [semaines-A.csv]
+    Sem. B       = Semaine B           [:notin: semaines-A.csv]
+    Sem. AP-2NDE = Semaine AP de 2NDE  [semaines-AP-2NDE.csv]
+
+
+schedule::
+    tuesday::
+        08h-10h          = 2GT1
+        10h-11h          = 1S2
+        11h-12h (Sem. A) = 1S2  (AP)
+
+    wednesday::
+        08h-10h                = BTS
+        10h-11h                = 1S2  (Gpe 2)
+        11h-12h                = 2GT1 (Gpe 1)
+        12h-13h (Sem. AP-2NDE) = 2GT1 (AP)
+
+    thursday::
+        08h-09h = BTS  (CRC)
+        10h-11h = 1S2  (Gpe 1)
+        11h-12h = 2GT1 (Gpe 2)
+
+    friday::
+        09h-11h = 1S2
+        08h-09h = BTS  (CRCI)
+        15h-16h = 2GT1
+
+
+books::
+    2GT1::
+// Here we use the name ``main`` to indicate a default book (this is useful for
+// only one book). This is just a convention because the first book defined
+// will always be the default one.
+        main::
+            title  = MATHS 2NDE
+            author = Sésamath
+            editor = MAGNARD
+            year   = 2014
+            link   = http://manuel.sesamath.net
+
+    1S2::
+        main::
+            title  = maths repèrs 1ère S
+            author = Boris, Hanouch ; Maxime, Cocault ; Thierry, Joffredo ;
+                     Agnès, Choquer-Rouault ; Fabienne, Bruneau
+            editor = Hachette Éducation
+            year   = 2011
+
+    BTS2::
+        analyse::
+            title      = Analyse et algèbre
+                       - BTS Industriels Tome 1 - Groupements B, C et D
+            authors    = Bernard, Verlant ; Jean, Guichard ; François, Mailloux
+            editor     = Foucher
+            collection = Sigma
+            year       = 2014
+
+        stat::
+            title      = Statistique et probabilités
+                       - BTS Industriels Tome 1 - Groupements B, C et D
+            author     = Bernard, Verlant ; Jean, Guichard ; François, Mailloux
+            editor     = Foucher
+            collection = Sigma
+            year       = 2014

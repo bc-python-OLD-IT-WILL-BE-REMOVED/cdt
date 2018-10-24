@@ -1,0 +1,24 @@
+title_test::
+    D.S.
+
+title_test_home::
+    D.M.
+
+title_test_lesson::
+    interrogation de cours
+
+title_test_mcq::
+    Q.C.M. noté
+
+title_test_info::
+    évaluation en salle informatique
+
+
+test_ref_before::
+    cette évaluation portera sur {some_refs}
+
+test_ref_now::
+    cette évaluation porte sur {some_refs}
+
+test_ref_after::
+    cette évaluation portait sur {some_refs}

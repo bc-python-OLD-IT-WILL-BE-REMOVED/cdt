@@ -1,0 +1,20 @@
+tuesday::
+    08h-10h          = 2GT1
+    10h-11h          = 1S2
+    11h-12h (Sem. A) = 1S2  (AP)
+
+wednesday::
+    08h-10h                = BTS
+    10h-11h                = 1S2  (Gpe 2)
+    11h-12h                = 2GT1 (Gpe 1)
+    12h-13h (Sem. AP-2NDE) = 2GT1 (AP)
+
+thursday::
+    08h-09h = BTS  (CRC)
+    10h-11h = 1S2  (Gpe 1)
+    11h-12h = 2GT1 (Gpe 2)
+
+friday::
+    09h-11h = 1S2
+    08h-09h = BTS  (CRCI)
+    15h-16h = 2GT1
