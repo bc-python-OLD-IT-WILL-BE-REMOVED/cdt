@@ -44,7 +44,7 @@ setup(
 
 # Descritions
     long_description = longdesc,
-    description      = "[C]ahier [d]e [T]exte pour enseignant - Only a French project (for the moment)",
+    description      = "Pedagogical log - \"[C]ahier [d]e [T]exte\" in French",
 
 # What to add ?
     packages = find_packages(),

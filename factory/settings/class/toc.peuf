@@ -1,0 +1,93 @@
+/* ------------------------ *
+ * -- BLOCKS FOR THE ToC -- *
+ * ------------------------ */
+
+
+blocks::
+    keyval::
+        sep  : =
+        names: style
+
+    special::
+        check: <toc/set>
+        names: lesson
+
+
+keys-vals::
+    style::
+        h1 h2 h3 h4 h5: [cdt] "part"
+                              "chapter"
+                              "section" "subsection" "subsubsection"
+                              "paragraph"
+
+
+doc::
+    This file allows to indicate the table of content of your lessons using a
+    standard syntax in the block ``lesson`` and eventually the block ``style``
+    to customize the texts used in the CdT logs.
+
+
+    Here is an example code: see inside the two horizontal rules.
+
+    ------------------------------------------------------------------------
+    lesson\::
+        A) Title of level 1
+            I) Title of level 2
+                1) Sub level of level 3
+                    a) Sub level of level 4
+                        i) Sub level of level 5
+                            1) Sub level of level 6
+
+            II) And so on...
+
+        B) Stop here : this is just an example
+
+    style\::
+        h1 = part
+        h2 = chapter
+        h3 = section
+        h4 = subsection
+        h5 = subsubsection
+        h6 = paragraph
+    ------------------------------------------------------------------------
+
+    The table of content must be defined in the block ``lesson`` using
+    indentation of four spaces. In your CdT logs you will simply write the
+    id number of the title like for example ``A`` or ``A-I-1-a``.
+
+
+    << Warning ! >> The indentation indicates the level of the title.
+
+
+    The block ``style`` allows to choose inside a list of standard texts to
+    be used to indicate the kind of a title. For example, ``A`` and ``A-I-1-a``
+    will be indicated as the "part A" and the "subsection A-I-1-a" if we use
+    the code above.
+
+
+    By default, CdT uses the following simplified style such as to obtain
+    easy-to-read texts in the CdT logs. Note how easy it is to define the
+    same text for several levels.
+
+    ------------------------------------------------------------------------
+    style\::
+        h1             = chapter
+        h2 h3 h4 h5 h6 = section
+    ------------------------------------------------------------------------
+
+
+    Here is the full list of available texts sorted from the higher semantic
+    meaning to the lower one (but you can choose whatever you want as it is
+    done for the default behavior).
+
+        1) ``part``
+
+        2) ``chapter``
+
+        3) ``section``
+
+        4) ``subsection``
+
+        5) ``subsubsection``
+
+        6) ``paragraph``

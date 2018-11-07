@@ -37,11 +37,11 @@ def build_tui(version):
     print()
 
     tui.menu(
-        glob          = globals(),
-        version       = version,
-        cango_up      = True,
+        glob         = globals(),
+        version      = version,
+        cango_up     = True,
         header       = "Build a directory for your CdT logs",
-        descriptions  = [
+        descriptions = [
             x.strip() for x in """
                 [[default]] directory (recommended option).
                 [[personal]] directory.

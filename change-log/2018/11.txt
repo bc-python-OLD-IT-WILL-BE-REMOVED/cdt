@@ -1,0 +1,11 @@
+==========
+2017-11-05
+==========
+
+**Serious new build of the brand new ¨cdt:** this project is a total refactoring of tools to write a pedagogical log which are called "[c]ahier [d]e [t]exte" in french. The aim of this version is to be used by other teachers than the author of ¨cdt.
+
+
+**Making of a TUI:** merely empty shells has been implemented to allow to work with ¨cdt inside a terminal.
+
+
+**Specifications:** we start to code an easy-to-maintain factory just for the specifications for the moment. At this time, the job has only be done for days, tests and table of contents of one class.
