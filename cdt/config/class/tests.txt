@@ -1,0 +1,66 @@
+/* ------------------------------- *
+ * -- "HOW TO" COMMENTS - START -- *
+ * ------------------------------- *
+
+In this file you can indicate efficiently all your tests. For the moment
+there are 7 kinds of tests.
+
+   1) ``computer``: an evaluation with the use of a computer.
+
+   2) ``home``: a homework evaluated.
+
+   3) ``lesson``: a test evaluating a good knowledge of the lesson.
+
+   4) ``mcq``: a multi-choice questions like test.
+
+   3) ``oral``: an oral evaluation.
+
+   6) ``presentation``: a presentation evaluated.
+
+   7) ``test``: a classical test.
+
+
+Let's see for example how to indicate one classical test using all the
+informations (the same features are available for all kinds of tests).
+
+
+Here is an example code : see inside the two horizontal rules.
+
+------------------------------------------------------------------------
+test::
+    date    = 24/10/2018  (2018-10-14)
+    toc     = A...B-I-1 & C-I
+    time    = 2h
+    title   = Good use of CdT
+    comment = This test will be a bonus. Just try to do the best !
+------------------------------------------------------------------------
+
+Let's explain how this code works.
+
+    1) ``date`` is for two informations. First we indicate when a test
+    occurs or when a homework must be given back. Then we can indicate
+    inside braces the day we give the information about the test to the
+    students.
+
+    In our example, we show the two formats allowed for dates : you can
+    use either ``DD/MM/YYYY`` or ``YYYY-MM-DD`` where the numbers YYYY,
+    MM and DD are respectively the year, the month and the day.
+
+    If your CdT logs are set for one year, that is for twelve months,
+    the year can be omitted.
+
+    2) ``toc`` allows to indicate references to your lesson. Here
+    ``A...B-I-1 & C-I`` indicates to learn from the chapter/part A to the
+    subsection 1 in section I of the chapter/part B, and also to learn the
+    section I of the chapter/part C.
+
+    3) ``time`` is the duration of the test using standard notations.
+    You can type ``120min`` instead of ``2h``.
+
+    4) ``title`` is the title of the test.
+
+    5) ``comment`` allows to add small comments about the test.
+
+ * ----------------------------- *
+ * -- "HOW TO" COMMENTS - END -- *
+ * ----------------------------- */

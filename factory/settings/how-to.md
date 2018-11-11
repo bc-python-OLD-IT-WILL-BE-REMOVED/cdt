@@ -11,7 +11,7 @@ Except for the file `class/onemonth.peuf`, the name and relative path used in th
 The block `doc`
 ---------------
 
-This block contains a small documentation that will be put as a comment inside the files added when the user initializes one directory for his CdT logs.
+This block contains a relatively short documentation that will be put as a comment inside the files added when the user initializes one directory for his CdT logs.
 
 
 
@@ -20,7 +20,7 @@ The block `sections`     ????
 
 This block defines the sections that can be used, and it is a `key: val` block with two possible keys.
 
-  * `check: <onefunc>` indicates that the title of a section must be validated by the function ``onefunc``.
+  * `check: <onefunc>` indicates that the title of a section must be validated by the function ``onefunc`` *(see below for the convention used)*.
 
   * `names: ...` gives the names of the sections separated by blank characters.
 
@@ -45,7 +45,7 @@ This is a `key: val` block with two keys.
 
 This is a `key: val` block with two keys.
 
-  * `check: <onefunc>` indicates that the function ``onefunc`` will be used to validate the content of the block.
+  * `check: <onefunc>` indicates that the function ``onefunc`` will be used to validate the content of the block *(see below for the convention used)*.
 
   * `names: ...` gives the names of blocks separated by blank characters.
 
@@ -61,12 +61,12 @@ We can then define for blocks the keys and how to validate their associated valu
 
   1. ``keyname = <onefunc>`` indicates for a key named ``keyname`` that the values must be validated by the function ``onefunc`` (see above).
 
-  2. ``keyname = <misc/asit>`` indicates that the values are just raw strings (no validation to achieve).
+  2. ``keyname = <__asit__>`` indicates that the values are just raw strings (no validation to achieve).
 
   3. ``keyname = "word", "and", "so", "on"`` indicates a list of words inside quotes separated by blank spaces.
-  We can also use ``keyname = [cdt] "word", "and", "so", "on"`` if the words will be used in the CdT logs (this words need to be translated).
+  We can also use ``keyname = [cdt] "word", "and", "so", "on"`` if the words will be used in the CdT logs (this words will need to be translated).
 
-  4. ``multikeyname = [newctxt] ...``, where ``...`` is any kind of the indications given above for ``keyname``, indicated that each time this "multi-key" will be met a new context will start.
+  4. ``multikeyname = [newctxt] ...``, where ``...`` is any kind of the indications given above for ``keyname``, indicates that each time this "multi-key" will be met a new context will start.
   This implies that other keys can't be used twice between two consecutive ``multikeyname``.
 
 
@@ -74,16 +74,16 @@ We can then define for blocks the keys and how to validate their associated valu
 Conventions for internal functions   ?????
 ----------------------------------
 
-When we indicate a function using `<onefunc>`, we use names like `:ctxtname/onefunc:` where `ctxtname` is the name of a file inside the module `check`, and `onefunc` is the name of one function inside the file `check/ctxtname.py`.
+When we indicate a function using `<onefunc>`, we use names like `<ctxtname/onefunc>` where `ctxtname` is the name of a file inside the module `check`, and `onefunc` is the name of one function inside the file `check/ctxtname.py`.
 
 
-When ``keyname = [in] "word" "and" "so" "on"`` is used, the list of names will be tested by a function uniquely autonamed `peufdir_peuffile_blockname_AUTONB` of the file `check/choices.py` if we have the following things inside the folder of the specifications.
+When ``keyname = "word" "and" "so" "on"`` is used, the list of names will be tested by a function uniquely named `peufdir_peuffile_blockname_[AUTONB]` inside the file `check/choose.py`. We use the following informations about the folder of the specifications.
 
-   * `peufdir` is the name of the foolder containing the peuf file of the specifications.
+   * `peufdir` is the name of the folder containing the peuf file of the specifications.
 
-   * `peuffile` is the peuf file of the specifications.
+   * `peuffile` is the name of peuf file of the specifications.
 
-   * `blockname` is the name of the block where the list of texts for one key has been found.
+   * `blockname` is the name of the block containing the key with values to be inside a list of texts.
 
-   * `AUTONB` is an auto number so as to have a unique name.
+   * `[AUTONB]` is an incremented integer used so as to have a unique name of function. We can't use `keyname ` because several keys can share the same checking.
 

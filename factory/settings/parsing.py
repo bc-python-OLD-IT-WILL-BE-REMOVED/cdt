@@ -15,6 +15,8 @@ XTRAS_TAGS = {
     f"[{tag}]": (tag, len(tag) + 2)
     for tag in XTRAS_TAGS
 }
+
+
 # ---------------------- #
 # -- OUR LITTLE TOOLS -- #
 # ---------------------- #
@@ -44,15 +46,21 @@ def check(infos):
     if infos[0] != '<' or infos[-1] != '>':
         raise ValueError(f"wrong function identificator : {infos}")
 
-    _infos = infos[1:-1].split('/')
+    infos = infos[1:-1]
 
-    if len(_infos) != 2:
-        raise ValueError(f"wrong function identificator : {infos}")
+    if infos == "__asit__":
+        pyfilename, funcname = "misc", "asit"
 
-    pyfilename, funcname = _infos
+    else:
+        _infos = infos.split('/')
+
+        if len(_infos) != 2:
+            raise ValueError(f"wrong function identificator : {infos}")
+
+        pyfilename, funcname = _infos
 
     return {
-        "file"    : pyfilename,
+        "pyfile"  : pyfilename,
         "funcname": funcname
     }
 
@@ -72,7 +80,10 @@ def choices(infos):
 
         _infos.append(word)
 
-    return {":listofwords:": _infos}
+    return {
+        "pyfile"     : "choose",
+        "listofwords": _infos
+    }
 
 
 def peufmode(infos):
@@ -145,10 +156,9 @@ def normalize_specs(specs):
                         valcheck = validator(valcheck)
 
                         if xtras:
-                            valcheck[":extras:"] = xtras
+                            valcheck["extras"] = xtras
 
-                        for realkey in key.split():
-                            _subinfos[realkey] = valcheck
+                        _subinfos[tuple(key.split())] = valcheck
 
                     infos[blocks] = _subinfos
 

@@ -4,7 +4,8 @@ from mistool.os_use import PPath
 from mistool.term_use import Step
 from orpyste.data import ReadBlock
 
-import tools
+import parsing
+import newfunc
 
 
 # --------------- #
@@ -18,6 +19,7 @@ for PYPROJECT_DIR in THIS_DIR.parents:
         break
 
 PYPROJECT_DIR /= "cdt"
+CONFIG_DIR = PYPROJECT_DIR / "config"
 
 SETTINGS_DIR = THIS_DIR.parent / "settings"
 
@@ -61,13 +63,63 @@ for dirname in hardspecs:
             )
 
 
-specs = tools.normalize_specs(specs)
+specs = parsing.normalize_specs(specs)
 
 
-# ----------------- #
-# -- CLEAN INFOS -- #
-# ----------------- #
+# ------------------------ #
+# -- UPDATING TEMPLATES -- #
+# ------------------------ #
 
-print()
-print()
+SUBSTEPS("Building templates.")
+
+for names in specs:
+    dirname, filename = names
+    doc               = specs[names].pop("doc")
+
+    tempfile = CONFIG_DIR / dirname / f"{filename}.txt"
+    tempfile.create("file")
+
+    with open(
+        file     = tempfile,
+        mode     = "w",
+        encoding = "utf-8"
+    ) as file:
+        file.write(f"""
+/* ------------------------------- *
+ * -- "HOW TO" COMMENTS - START -- *
+ * ------------------------------- *
+
+{doc}
+
+ * ----------------------------- *
+ * -- "HOW TO" COMMENTS - END -- *
+ * ----------------------------- */
+        """.strip() + "\n")
+
+
+
+
+
+
+# --------------------------------------------------- #
+# -- UPDATING ?????, -- #
+# --------------------------------------------------- #
+
+
+# --------------------------------------------------- #
+# -- UPDATING ?????, -- #
+# --------------------------------------------------- #
+
+
+# --------------------------------------------------- #
+# -- UPDATING ?????, -- #
+# --------------------------------------------------- #
+
+
+# --------------------------------------------------- #
+# -- UPDATING ?????, -- #
+# --------------------------------------------------- #
+
+
+print("\n"*20)
 import pprint;pprint.pprint(specs)

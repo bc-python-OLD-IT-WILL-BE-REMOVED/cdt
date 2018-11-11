@@ -20,7 +20,7 @@ keys-vals::
         date         : <date/day>
         toc          : <toc/refinline>
         time         : <date/time>
-        title comment: <misc/asit>
+        title comment: <__asit__>
 
 
 doc::
@@ -60,8 +60,9 @@ doc::
     Let's explain how this code works.
 
         1) ``date`` is for two informations. First we indicate when a test
-        occurs or when a homework must be given. Then we can indicate inside
-        braces the day we give the information about the test to the students.
+        occurs or when a homework must be given back. Then we can indicate
+        inside braces the day we give the information about the test to the
+        students.
 
         In our example, we show the two formats allowed for dates : you can
         use either ``DD/MM/YYYY`` or ``YYYY-MM-DD`` where the numbers YYYY,
@@ -80,4 +81,4 @@ doc::
 
         4) ``title`` is the title of the test.
 
-        5) ``comment`` allows to add a small comment about the test.
+        5) ``comment`` allows to add small comments about the test.

@@ -1,0 +1,128 @@
+/* ------------------------------- *
+ * -- "HOW TO" COMMENTS - START -- *
+ * ------------------------------- *
+
+One first rule to know is that the path of the file gives infos about
+the months : you must respect paths looking like ``YYYY/MM.txt`` put
+inside the folder of one class where YYYY and MM are numbers of the year
+and the month respectively (at least one of this files is automatically
+created when you initialize you CdT logs).
+
+
+A useful thing is that in a "month file" you can give the informations from
+the very last day to the oldest one. Open the file an just type...
+
+
+Here is an example of one day in the following example code : see inside the
+two horizontal "minus" rules. We have used the full syntax for dates.
+
+------------------------------------------------------------------------
+==========
+25/10/2018
+==========
+
+cor::
+    book = 1p23 ... 5p24
+
+train::
+    lesson = exa A-I-2 , exa A-II-4
+
+lesson::
+    A
+        I
+        II
+            1
+            2
+            3
+                a
+
+next::
+    audio = Listen track 1 and 2 in
+            cf::``One web page with some sound tracks ;
+                  https://github.com/bc-python/orpyste``
+
+    date = 30/10/2018
+    perso = Read "Working with CdT"  &  "Be efficient with CdT"
+------------------------------------------------------------------------
+
+
+Before we start to explain step by step how all of this works, you must
+know that your tests must be indicated separately in the file ``test.txt``
+and not directly inside a day. There is also a file for the table of
+content for your lessons, and a folder for your timetable (see one level
+up from the current folder).
+
+
+Let's go ! First we indicate one day using a short date (that will be the
+job of CdT to produce human formats of dates).
+
+------------------------------------------------------------------------
+==========
+25/10/2018
+==========
+
+...
+------------------------------------------------------------------------
+
+The full formats for dates can be either ``25/10/2018`` or ``2018-10-25``,
+that is ``DD/MM/YYYY`` or ``YYYY-MM-DD`` where the numbers YYYY, MM and DD
+are respectively the year, the month and the day. Indeed you can use the
+shortest formats ``DD/MM``, ``MM-DD`` or ``DD`` because the path
+of the file already gives the year and the month.
+
+
+Then we have two blocks ``cor`` and ``train`` for the corrections and the
+training done with the teacher in the classroom. Here is what our example
+indicates.
+
+------------------------------------------------------------------------
+cor::
+    book = 1p23 ... 5p24
+
+train::
+    lesson = exa A-I-2 , exa A-II-4
+------------------------------------------------------------------------
+
+Here we indicate that exercices from number 1 page 23 to number 5 page 24
+has been corrected, and also that students have done on examples A-I-2 and
+A-II-4 in the lesson.
+
+
+We continue with the block ``lesson`` to indicate what has been done in
+the lesson of the course. Here the section I to II-3-a of the chapter A
+has been done. The numbers used are the one indicated the table of content
+in the file ``toc.txt`` (the first level can indicate either a chapter or
+a part, this can be customized in the settings of the table of content).
+
+------------------------------------------------------------------------
+lesson::
+    A
+        I
+        II
+            1
+            2
+            3
+                a
+------------------------------------------------------------------------
+
+
+We finish with the block ``next`` to indicate works to be done for the next
+courses.
+
+------------------------------------------------------------------------
+next::
+    audio = Listen track 1 and 2 in
+            cf::``One web page with some sound tracks ;
+                  https://github.com/bc-python/orpyste``
+
+    date = 30/10/2018
+    perso = Read "Working with CdT"  &  "Be efficient with CdT"
+------------------------------------------------------------------------
+
+The first information having no date, the audio homework has to be done for
+the next lesson. For the second work, it has to be done for the sunday 30
+in october 2018.
+
+ * ----------------------------- *
+ * -- "HOW TO" COMMENTS - END -- *
+ * ----------------------------- */
